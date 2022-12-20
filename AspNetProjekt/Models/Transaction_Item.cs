@@ -1,9 +1,13 @@
-﻿namespace AspNetProjekt.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AspNetProjekt.Models
 {
     public class Transaction_Item
     {
-        Guid IdTransaction;
-        Guid IdItem;
-        decimal ItemPrice;
+        [Key]
+        public Guid TransactionId;
+        [Key] 
+        public Guid ItemId;
+        public decimal ItemPrice;
     }
 }

@@ -1,9 +1,12 @@
-﻿namespace AspNetProjekt.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AspNetProjekt.Models
 {
     public class Transaction
     {
-        Guid UserId;
-        Guid Transaction_Item;
-        DateTime TransactionDate;
+        [Key]
+        public Guid UserId;
+        public Guid Transaction_Item;
+        public DateTime TransactionDate;
     }
 }

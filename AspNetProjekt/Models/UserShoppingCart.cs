@@ -1,8 +1,11 @@
-﻿namespace AspNetProjekt.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AspNetProjekt.Models
 {
     public class UserShoppingCart
     {
-        Guid UserId;
-        List<Item> Items;
+        [Key]
+        public Guid UserId;
+        public List<Item> Items;
     }
 }

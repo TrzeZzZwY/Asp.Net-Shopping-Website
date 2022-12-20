@@ -1,8 +1,12 @@
-﻿namespace AspNetProjekt.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AspNetProjekt.Models
 {
     public class UserWishList
     {
-        Guid UserId;
-        Guid ItemId;
+        [Key]
+        public Guid UserId;
+        [Key]
+        public Guid ItemId;
     }
 }

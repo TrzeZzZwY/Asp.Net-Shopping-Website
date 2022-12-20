@@ -1,8 +1,12 @@
-﻿namespace AspNetProjekt.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AspNetProjekt.Models
 {
     public class Category
     {
-        Guid CategoryId;
-        string CategoryName;
+        [Key]
+        public Guid CategoryId;
+        public string CategoryName;
+        public ISet<Item> items;
     }
 }
