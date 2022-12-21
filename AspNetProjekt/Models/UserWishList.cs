@@ -8,5 +8,6 @@ namespace AspNetProjekt.Models
         public Guid UserId;
         [Key]
         public Guid ItemId;
+        public Item Item;
     }
 }

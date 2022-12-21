@@ -4,6 +4,7 @@ using AspNetProjekt.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetProjekt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20221221205929_relation_test2")]
+    partial class relation_test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,15 +37,15 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = new Guid("f0f51ae5-bca8-4293-bdd8-5836270e3532")
+                            CategoryId = new Guid("6aaa00d1-47cb-4463-b6c1-4358bcd64600")
                         },
                         new
                         {
-                            CategoryId = new Guid("e53394f9-2c05-440a-b148-4da84ec7603a")
+                            CategoryId = new Guid("61dd9ecb-a782-4f72-af96-8d1893d47df8")
                         },
                         new
                         {
-                            CategoryId = new Guid("245f5db9-7645-4376-a815-abb26b3849c5")
+                            CategoryId = new Guid("78af5651-b919-4914-a009-e74a72dc73b9")
                         });
                 });
 
@@ -119,8 +121,6 @@ namespace AspNetProjekt.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "ItemId");
-
-                    b.HasIndex("ItemId");
 
                     b.ToTable("UsersWishLists");
                 });
@@ -387,17 +387,6 @@ namespace AspNetProjekt.Migrations
                     b.Navigation("Transaction");
                 });
 
-            modelBuilder.Entity("AspNetProjekt.Models.UserWishList", b =>
-                {
-                    b.HasOne("AspNetProjekt.Models.Item", "Item")
-                        .WithMany("userWishLists")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-                });
-
             modelBuilder.Entity("CategoryItem", b =>
                 {
                     b.HasOne("AspNetProjekt.Models.Category", null)
@@ -484,8 +473,6 @@ namespace AspNetProjekt.Migrations
                     b.Navigation("ItemLikes");
 
                     b.Navigation("transaction_Items");
-
-                    b.Navigation("userWishLists");
                 });
 
             modelBuilder.Entity("AspNetProjekt.Models.Transaction", b =>

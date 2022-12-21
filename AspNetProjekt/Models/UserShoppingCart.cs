@@ -6,6 +6,6 @@ namespace AspNetProjekt.Models
     {
         [Key]
         public Guid UserId;
-        public List<Item> Items;
+        public List<Item>? Items;
     }
 }
