@@ -6,10 +6,10 @@ namespace AspNetProjekt.Models
     {
         [Key]
         public Guid TransactionId;
-        public Transaction Transaction;
+        public Transaction? Transaction;
         [Key] 
         public Guid ItemId;
-        public Item Item;
+        public Item? Item;
         public decimal ItemPrice;
     }
 }

@@ -7,6 +7,6 @@ namespace AspNetProjekt.Models
         [Key]
         public Guid CategoryId;
         public string CategoryName;
-        public ISet<Item> items;
+        public ISet<Item>? items;
     }
 }

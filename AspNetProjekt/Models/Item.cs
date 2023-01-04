@@ -11,9 +11,9 @@ namespace AspNetProjekt.Models
         public int ItemDiscout;
         public int ItemAvalibility;
         public ISet<Category>? Categories;
-        public List<UserShoppingCart>? userShoppingCarts;
-        public List<Transaction_Item>? transaction_Items;
+        public List<CustomerShoppingCart>? CustomerShoppingCarts;
+        public List<Transaction_Item>? Transaction_Items;
         public List<ItemLikes>? ItemLikes;
-        public List<UserWishList>? userWishLists;
+        public List<CustomerWishList>? CustomerWishLists;
     }
 }

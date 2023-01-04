@@ -6,7 +6,8 @@ namespace AspNetProjekt.Models
     {
         [Key]
         public Guid TransactionId;
-        public Guid UserId;
+        public Guid CustomerId;
+        public Customer? Customer;
         public List<Transaction_Item>? transaction_Items;
         public DateTime TransactionDate;
     }

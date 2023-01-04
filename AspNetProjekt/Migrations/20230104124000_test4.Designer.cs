@@ -4,6 +4,7 @@ using AspNetProjekt.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetProjekt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230104124000_test4")]
+    partial class test4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,65 +41,19 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = new Guid("26a2e4cc-44d6-4309-906e-e8139e03bd4f"),
+                            CategoryId = new Guid("542ea9d9-29bc-4895-89e8-0acf806f6827"),
                             CategoryName = "Pluszak"
                         },
                         new
                         {
-                            CategoryId = new Guid("463fa8e1-d023-4434-910c-e3984c111cf6"),
+                            CategoryId = new Guid("6d6f9b3e-f2c8-4ec8-b2fc-37c6623d06ac"),
                             CategoryName = "Szalik"
                         },
                         new
                         {
-                            CategoryId = new Guid("c9a23282-9993-438c-bb82-32d5d27c4a0a"),
+                            CategoryId = new Guid("1e89d7a8-26b8-4531-947c-96f71f432fc1"),
                             CategoryName = "Czapka"
                         });
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.Customer", b =>
-                {
-                    b.Property<Guid>("CustomerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CustomerId");
-
-                    b.HasIndex("IdentityUserId")
-                        .IsUnique()
-                        .HasFilter("[IdentityUserId] IS NOT NULL");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerShoppingCart", b =>
-                {
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CustomerId");
-
-                    b.ToTable("UsersShoppingCarts");
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerWishList", b =>
-                {
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CustomerId", "ItemId");
-
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("UsersWishLists");
                 });
 
             modelBuilder.Entity("AspNetProjekt.Models.Item", b =>
@@ -106,19 +62,6 @@ namespace AspNetProjekt.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ItemAvalibility")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItemDiscout")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ItemName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("ItemPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("ItemId");
 
                     b.ToTable("Items");
@@ -126,23 +69,154 @@ namespace AspNetProjekt.Migrations
 
             modelBuilder.Entity("AspNetProjekt.Models.ItemLikes", b =>
                 {
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("CustomerId", "ItemId");
-
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
+                    b.HasKey("UserId", "ItemId");
 
                     b.HasIndex("ItemId");
 
                     b.ToTable("ItemsLikes");
                 });
 
-            modelBuilder.Entity("AspNetProjekt.Models.MyUser", b =>
+            modelBuilder.Entity("AspNetProjekt.Models.Transaction", b =>
+                {
+                    b.Property<Guid>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TransactionId");
+
+                    b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("AspNetProjekt.Models.Transaction_Item", b =>
+                {
+                    b.Property<Guid>("TransactionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TransactionId", "ItemId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("Transaction_Items");
+                });
+
+            modelBuilder.Entity("AspNetProjekt.Models.UserShoppingCart", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UsersShoppingCarts");
+                });
+
+            modelBuilder.Entity("AspNetProjekt.Models.UserWishList", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "ItemId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("UsersWishLists");
+                });
+
+            modelBuilder.Entity("CategoryItem", b =>
+                {
+                    b.Property<Guid>("CategoriesCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("itemsItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CategoriesCategoryId", "itemsItemId");
+
+                    b.HasIndex("itemsItemId");
+
+                    b.ToTable("CategoryItem");
+                });
+
+            modelBuilder.Entity("ItemUserShoppingCart", b =>
+                {
+                    b.Property<Guid>("ItemsItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("userShoppingCartsUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ItemsItemId", "userShoppingCartsUserId");
+
+                    b.HasIndex("userShoppingCartsUserId");
+
+                    b.ToTable("ItemUserShoppingCart");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -205,126 +279,6 @@ namespace AspNetProjekt.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.Transaction", b =>
-                {
-                    b.Property<Guid>("TransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("TransactionId");
-
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
-
-                    b.ToTable("Transactions");
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.Transaction_Item", b =>
-                {
-                    b.Property<Guid>("TransactionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("ItemPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("TransactionId", "ItemId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("Transaction_Items");
-                });
-
-            modelBuilder.Entity("CategoryItem", b =>
-                {
-                    b.Property<Guid>("CategoriesCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("itemsItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CategoriesCategoryId", "itemsItemId");
-
-                    b.HasIndex("itemsItemId");
-
-                    b.ToTable("CategoryItem");
-                });
-
-            modelBuilder.Entity("CustomerShoppingCartItem", b =>
-                {
-                    b.Property<Guid>("CustomerShoppingCartsCustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemsItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CustomerShoppingCartsCustomerId", "ItemsItemId");
-
-                    b.HasIndex("ItemsItemId");
-
-                    b.ToTable("CustomerShoppingCartItem");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -412,79 +366,21 @@ namespace AspNetProjekt.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AspNetProjekt.Models.Customer", b =>
-                {
-                    b.HasOne("AspNetProjekt.Models.MyUser", "IdentityUser")
-                        .WithOne("customer")
-                        .HasForeignKey("AspNetProjekt.Models.Customer", "IdentityUserId");
-
-                    b.Navigation("IdentityUser");
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerShoppingCart", b =>
-                {
-                    b.HasOne("AspNetProjekt.Models.Customer", "Customer")
-                        .WithOne("CustomerShoppingCart")
-                        .HasForeignKey("AspNetProjekt.Models.CustomerShoppingCart", "CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerWishList", b =>
-                {
-                    b.HasOne("AspNetProjekt.Models.Customer", "Customer")
-                        .WithOne("CustomerWishList")
-                        .HasForeignKey("AspNetProjekt.Models.CustomerWishList", "CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AspNetProjekt.Models.Item", "Item")
-                        .WithMany("CustomerWishLists")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Item");
-                });
-
             modelBuilder.Entity("AspNetProjekt.Models.ItemLikes", b =>
                 {
-                    b.HasOne("AspNetProjekt.Models.Customer", "Customer")
-                        .WithOne("ItemLikes")
-                        .HasForeignKey("AspNetProjekt.Models.ItemLikes", "CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AspNetProjekt.Models.Item", "Item")
                         .WithMany("ItemLikes")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
-
                     b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.Transaction", b =>
-                {
-                    b.HasOne("AspNetProjekt.Models.Customer", "Customer")
-                        .WithOne("Transaction")
-                        .HasForeignKey("AspNetProjekt.Models.Transaction", "CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("AspNetProjekt.Models.Transaction_Item", b =>
                 {
                     b.HasOne("AspNetProjekt.Models.Item", "Item")
-                        .WithMany("Transaction_Items")
+                        .WithMany("transaction_Items")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -498,6 +394,17 @@ namespace AspNetProjekt.Migrations
                     b.Navigation("Item");
 
                     b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("AspNetProjekt.Models.UserWishList", b =>
+                {
+                    b.HasOne("AspNetProjekt.Models.Item", "Item")
+                        .WithMany("userWishLists")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("CategoryItem", b =>
@@ -515,17 +422,17 @@ namespace AspNetProjekt.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CustomerShoppingCartItem", b =>
+            modelBuilder.Entity("ItemUserShoppingCart", b =>
                 {
-                    b.HasOne("AspNetProjekt.Models.CustomerShoppingCart", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerShoppingCartsCustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AspNetProjekt.Models.Item", null)
                         .WithMany()
                         .HasForeignKey("ItemsItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AspNetProjekt.Models.UserShoppingCart", null)
+                        .WithMany()
+                        .HasForeignKey("userShoppingCartsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -541,7 +448,7 @@ namespace AspNetProjekt.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("AspNetProjekt.Models.MyUser", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -550,7 +457,7 @@ namespace AspNetProjekt.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("AspNetProjekt.Models.MyUser", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -565,7 +472,7 @@ namespace AspNetProjekt.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AspNetProjekt.Models.MyUser", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -574,36 +481,20 @@ namespace AspNetProjekt.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("AspNetProjekt.Models.MyUser", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AspNetProjekt.Models.Customer", b =>
-                {
-                    b.Navigation("CustomerShoppingCart");
-
-                    b.Navigation("CustomerWishList");
-
-                    b.Navigation("ItemLikes");
-
-                    b.Navigation("Transaction");
-                });
-
             modelBuilder.Entity("AspNetProjekt.Models.Item", b =>
                 {
-                    b.Navigation("CustomerWishLists");
-
                     b.Navigation("ItemLikes");
 
-                    b.Navigation("Transaction_Items");
-                });
+                    b.Navigation("transaction_Items");
 
-            modelBuilder.Entity("AspNetProjekt.Models.MyUser", b =>
-                {
-                    b.Navigation("customer");
+                    b.Navigation("userWishLists");
                 });
 
             modelBuilder.Entity("AspNetProjekt.Models.Transaction", b =>

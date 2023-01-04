@@ -4,6 +4,7 @@ using AspNetProjekt.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetProjekt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230104211700_test6")]
+    partial class test6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,17 +41,17 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = new Guid("26a2e4cc-44d6-4309-906e-e8139e03bd4f"),
+                            CategoryId = new Guid("57ae6bd9-1c2d-483e-9d98-ea817b72816a"),
                             CategoryName = "Pluszak"
                         },
                         new
                         {
-                            CategoryId = new Guid("463fa8e1-d023-4434-910c-e3984c111cf6"),
+                            CategoryId = new Guid("9573caf2-c342-4029-bac2-aa3aed1d01c4"),
                             CategoryName = "Szalik"
                         },
                         new
                         {
-                            CategoryId = new Guid("c9a23282-9993-438c-bb82-32d5d27c4a0a"),
+                            CategoryId = new Guid("3bbed082-552c-498d-9302-a08e256ef868"),
                             CategoryName = "Czapka"
                         });
                 });
@@ -107,9 +109,6 @@ namespace AspNetProjekt.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ItemAvalibility")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItemDiscout")
                         .HasColumnType("int");
 
                     b.Property<string>("ItemName")

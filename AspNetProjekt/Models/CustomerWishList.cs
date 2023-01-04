@@ -2,12 +2,13 @@
 
 namespace AspNetProjekt.Models
 {
-    public class UserWishList
+    public class CustomerWishList
     {
         [Key]
-        public Guid UserId;
+        public Guid CustomerId;
+        public Customer? Customer;
         [Key]
         public Guid ItemId;
-        public Item Item;
+        public Item? Item;
     }
 }

@@ -5,15 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetProjekt.Areas.Identity.Data;
 
-public class IdentityContext : IdentityDbContext<IdentityUser>
+public class IdentityContext : IdentityDbContext<MyUser>
 {
     public DbSet<Category> Categories { get; set; }
     public DbSet<Item> Items { get; set; }
     public DbSet<ItemLikes> ItemsLikes { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Transaction_Item> Transaction_Items { get; set; }
-    public DbSet<UserShoppingCart> UsersShoppingCarts { get; set; }
-    public DbSet<UserWishList> UsersWishLists { get; set; }
+    public DbSet<CustomerShoppingCart> UsersShoppingCarts { get; set; }
+    public DbSet<CustomerWishList> UsersWishLists { get; set; }
+    public DbSet<Customer> Customers { get; set; }
     public IdentityContext(DbContextOptions<IdentityContext> options)
         : base(options)
     {
@@ -27,20 +28,36 @@ public class IdentityContext : IdentityDbContext<IdentityUser>
             new Category { CategoryId = Guid.NewGuid(), CategoryName = "Czapka" }
             );
         builder.Entity<Category>().HasKey(e => e.CategoryId);
+        builder.Entity<Category>().Property(e => e.CategoryName);
+
         builder.Entity<Item>().HasKey(e => e.ItemId);
-        builder.Entity<ItemLikes>().HasKey(o => new { o.UserId, o.ItemId });
+        builder.Entity<Item>().Property(e => e.ItemName);
+        builder.Entity<Item>().Property(e => e.ItemPrice);
+        builder.Entity<Item>().Property(e => e.ItemDiscout);
+        builder.Entity<Item>().Property(e => e.ItemAvalibility);
+
+        builder.Entity<ItemLikes>().HasKey(o => new { o.CustomerId, o.ItemId });
+
         builder.Entity<Transaction>().HasKey(e => e.TransactionId);
+        builder.Entity<Transaction>().Property(e => e.TransactionDate);
+
         builder.Entity<Transaction_Item>().HasKey(o => new { o.TransactionId, o.ItemId });
-        builder.Entity<UserShoppingCart>().HasKey(e => e.UserId);
-        builder.Entity<UserWishList>().HasKey(o => new { o.UserId, o.ItemId });
+        builder.Entity<Transaction_Item>().Property(e => e.ItemPrice);
+
+        builder.Entity<CustomerShoppingCart>().HasKey(e => e.CustomerId);
+
+        builder.Entity<CustomerWishList>().HasKey(o => new { o.CustomerId, o.ItemId });
+
+        builder.Entity<Customer>().HasKey(e => e.CustomerId);
+
         builder.Entity<Item>()
             .HasMany(e => e.Categories)
             .WithMany(e => e.items);
-        builder.Entity<UserShoppingCart>()
+        builder.Entity<CustomerShoppingCart>()
             .HasMany(e => e.Items)
-            .WithMany(e => e.userShoppingCarts);
+            .WithMany(e => e.CustomerShoppingCarts);
         builder.Entity<Item>().
-            HasMany(e => e.transaction_Items).
+            HasMany(e => e.Transaction_Items).
             WithOne(e => e.Item);
         builder.Entity<Transaction>().
             HasMany(e => e.transaction_Items)
@@ -49,8 +66,26 @@ public class IdentityContext : IdentityDbContext<IdentityUser>
             HasMany(e => e.ItemLikes)
             .WithOne(e => e.Item);
         builder.Entity<Item>()
-            .HasMany(e => e.userWishLists)
+            .HasMany(e => e.CustomerWishLists)
             .WithOne(e => e.Item);
+        builder.Entity<Customer>()
+            .HasOne(e => e.IdentityUser)
+            .WithOne(e => e.customer)
+            .HasForeignKey<Customer>(e => e.IdentityUserId);
+        builder.Entity<CustomerShoppingCart>()
+            .HasOne(e => e.Customer)
+            .WithOne(e => e.CustomerShoppingCart);
+        builder.Entity<CustomerWishList>()
+            .HasOne(e => e.Customer)
+            .WithOne(e => e.CustomerWishList);
+        builder.Entity<ItemLikes>()
+            .HasOne(e => e.Customer)
+            .WithOne(e => e.ItemLikes);
+        builder.Entity<Transaction>()
+            .HasOne(e => e.Customer)
+            .WithOne(e => e.Transaction)
+            .HasForeignKey<Transaction>(e => e.CustomerId);
+
 
         base.OnModelCreating(builder);
     }

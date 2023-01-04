@@ -2,10 +2,11 @@
 
 namespace AspNetProjekt.Models
 {
-    public class UserShoppingCart
+    public class CustomerShoppingCart
     {
         [Key]
-        public Guid UserId;
+        public Guid CustomerId;
+        public Customer? Customer;
         public List<Item>? Items;
     }
 }
