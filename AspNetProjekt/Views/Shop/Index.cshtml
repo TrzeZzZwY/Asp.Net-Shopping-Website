@@ -1,0 +1,55 @@
+﻿@model IEnumerable<AspNetProjekt.Models.Item>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Sklep";
+}
+<p>
+    <a asp-action="CreateItem">Dodaj nowy produkt</a></br>
+    <a asp-action="CreateCategory">Dodaj nową Kategorię</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemDiscout)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemLikes)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemDiscout)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemLikes)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
