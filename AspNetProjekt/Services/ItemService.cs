@@ -67,7 +67,7 @@ namespace AspNetProjekt.Services
                     return false;
                 find.ItemName = item.ItemName;
                 find.ItemPrice = item.ItemPrice;
-                find.ItemDiscout = item.ItemDiscout;
+                find.ItemDiscount = item.ItemDiscount;
                 find.ItemAvalibility = item.ItemAvalibility;
                 find.Categories = item.Categories;
                 find.CustomerShoppingCarts = item.CustomerShoppingCarts;

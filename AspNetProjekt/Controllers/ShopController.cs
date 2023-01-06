@@ -9,11 +9,13 @@ namespace AspNetProjekt.Controllers
     {
         private readonly IItemService _itemService;
         private readonly ICategoryService _categoryService;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public ShopController(IItemService itemService, ICategoryService categoryService)
+        public ShopController(IItemService itemService, ICategoryService categoryService, IWebHostEnvironment hostEnvironment)
         {
             _itemService = itemService;
             _categoryService = categoryService;
+            _hostEnvironment = hostEnvironment;
         }
 
         public IActionResult Index()
@@ -33,7 +35,7 @@ namespace AspNetProjekt.Controllers
                 itemDto.categoriesList.Add(new SelectListItem(category.CategoryName, category.CategoryId.ToString()));
             }
 
-            return View("CreateItem",itemDto);
+            return View("CreateItem", itemDto);
         }
 
         [HttpPost]
@@ -44,8 +46,21 @@ namespace AspNetProjekt.Controllers
 
             if (!ModelState.IsValid)
                 return CreateItem(itemDto);
-
             Item item = itemDto.ConvertTo();
+
+            string wwwrootPath = _hostEnvironment.WebRootPath;
+            string fileName = Path.GetFileNameWithoutExtension(itemDto.ImageFile.FileName);
+            string extension = Path.GetExtension(itemDto.ImageFile.FileName);
+            fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+
+            item.ItemImageName = fileName;
+
+            string path = Path.Combine(wwwrootPath + "/image", fileName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                itemDto.ImageFile.CopyTo(fileStream);
+            }
+
             var response = _itemService.Save(item);
             return View("Index", _itemService.FindAll());
         }

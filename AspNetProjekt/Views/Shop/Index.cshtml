@@ -23,10 +23,16 @@
                 @Html.DisplayNameFor(model => model.ItemPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ItemDiscout)
+                @Html.DisplayNameFor(model => model.ItemDiscount)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ItemLikes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemImageName)
             </th>
         </tr>
     </thead>
@@ -44,10 +50,23 @@
                     @Html.DisplayFor(modelItem => item.ItemPrice)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ItemDiscout)
+                    @Html.DisplayFor(modelItem => item.ItemDiscount)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ItemLikes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemDescription)
+                </td>
+                <td>
+                    @if (String.IsNullOrEmpty(item.ItemImageName))
+                    {
+                        <img src="~/image/noimage.jpg" asp-append-version="true" width="220" height="220" />
+                    }
+                    else
+                    {
+                        <img src="@("~/image/"+item.ItemImageName)" asp-append-version="true" width="220" height="220" />
+                    }
                 </td>
             </tr>
         }

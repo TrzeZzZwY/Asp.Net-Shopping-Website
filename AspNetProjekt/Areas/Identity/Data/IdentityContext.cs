@@ -33,8 +33,10 @@ public class IdentityContext : IdentityDbContext<MyUser>
         builder.Entity<Item>().HasKey(e => e.ItemId);
         builder.Entity<Item>().Property(e => e.ItemName);
         builder.Entity<Item>().Property(e => e.ItemPrice);
-        builder.Entity<Item>().Property(e => e.ItemDiscout);
+        builder.Entity<Item>().Property(e => e.ItemDiscount);
         builder.Entity<Item>().Property(e => e.ItemAvalibility);
+        builder.Entity<Item>().Property(e => e.ItemImageName);
+        builder.Entity<Item>().Property(e => e.ItemDescription);
 
         builder.Entity<ItemLikes>().HasKey(o => new { o.CustomerId, o.ItemId });
 

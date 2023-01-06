@@ -4,6 +4,7 @@ using AspNetProjekt.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetProjekt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230106214354_item_image_descpition")]
+    partial class item_image_descpition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,17 +41,17 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = new Guid("95e6c475-930e-46c1-81f9-984000f3a422"),
+                            CategoryId = new Guid("94a3e372-ee69-46ce-9e4f-233e6049551d"),
                             CategoryName = "Pluszak"
                         },
                         new
                         {
-                            CategoryId = new Guid("2e4e8cb8-782b-47fb-94d5-79d4504e6d0f"),
+                            CategoryId = new Guid("a400d90f-c408-4b63-a6ff-e13626387f63"),
                             CategoryName = "Szalik"
                         },
                         new
                         {
-                            CategoryId = new Guid("79f39c4b-7f31-47a6-b783-dacc7e76c9f1"),
+                            CategoryId = new Guid("e19ba9c5-0180-43a4-892c-7bbbc14e885f"),
                             CategoryName = "Czapka"
                         });
                 });
@@ -110,6 +112,7 @@ namespace AspNetProjekt.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ItemDescription")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ItemDiscount")
