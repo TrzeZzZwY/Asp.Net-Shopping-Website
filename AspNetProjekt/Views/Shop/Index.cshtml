@@ -10,7 +10,7 @@
     <a asp-action="CreateItem">Dodaj nowy produkt</a></br>
     <a asp-action="CreateCategory">Dodaj nową Kategorię</a>
 </p>
-<table class="table">
+<!--<table class="table">
     <thead>
         <tr>
             <th>
@@ -71,4 +71,35 @@
             </tr>
         }
     </tbody>
-</table>
+</table> -->
+<div class="container">
+    <div class="row row-cols-3 card-deck">
+
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card mb-4" style="width: 18rem;">
+                    @if (String.IsNullOrEmpty(item.ItemImageName))
+                    {
+                        <img class="card-img-top" width="220" height="220" style="max-height:260;max-width:260" src="~/image/noimage.jpg" asp-append-version="true" />
+                    }
+                    else
+                    {
+                        <img class="card-img-top" width="220" height="220" style="max-height:260;max-width:260" src="@("~/image/"+item.ItemImageName)" asp-append-version="true" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemName)</h5>
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
+                        <p class="card-text">iloś w magazynie: @Html.DisplayFor(modelItem => item.ItemAvalibility)</p>
+                        <a href="#" class="btn btn-primary d-inline-block ">like</a>
+                        <a href="#" class="btn btn-secondary d-inline-block">Lista życzeń</a>
+                        <a href="#" class="btn btn-danger d-inline-block">Koszyk</a>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
