@@ -6,15 +6,22 @@
 @{
     ViewData["Title"] = "Dodaj";
 }
+@if (String.IsNullOrEmpty(@Model.ItemId))
+{
+    <h1>Dodaj</h1>
+}
+else
+{
+    <h1>Edytuj</h1>
+}
 
-<h1>Create</h1>
-
-<h4>Nowy Przedmiot</h4>
+<h4>Przedmiot</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateItemForm" method="post" asp-controller="shop" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="ItemId" />
             <div class="form-group">
                 <label asp-for="ItemName" class="control-label"></label>
                 <input asp-for="ItemName" class="form-control" />
@@ -37,13 +44,20 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" class="form-control" accept="image/*"/>
+                <input asp-for="ImageFile" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
                 @Html.ListBoxFor(x => x.Categories,@Model.categoriesList)
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                @if (String.IsNullOrEmpty(@Model.ItemId))
+                {
+                    <input type="submit" value="Dodaj" class="btn btn-primary" />
+                }
+                else
+                {
+                    <input type="submit" value="Edytuj" class="btn btn-primary" />
+                }
             </div>
         </form>
     </div>

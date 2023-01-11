@@ -10,68 +10,6 @@
     <a asp-action="CreateItem">Dodaj nowy produkt</a></br>
     <a asp-action="CreateCategory">Dodaj nową Kategorię</a>
 </p>
-<!--<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemDiscount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemLikes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemImageName)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemDiscount)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemLikes)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemDescription)
-                </td>
-                <td>
-                    @if (String.IsNullOrEmpty(item.ItemImageName))
-                    {
-                        <img src="~/image/noimage.jpg" asp-append-version="true" width="220" height="220" />
-                    }
-                    else
-                    {
-                        <img src="@("~/image/"+item.ItemImageName)" asp-append-version="true" width="220" height="220" />
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table> -->
 <div class="container">
     <div class="row row-cols-3 card-deck">
 
@@ -79,6 +17,7 @@
         {
             <div class="col">
                 <div class="card mb-4" style="width: 18rem;">
+                    <a asp-action="EditItem" asp-route-id="@item.ItemId" style="position:absolute" class="btn btn-danger d-inline-block m-1">edit</a>
                     @if (String.IsNullOrEmpty(item.ItemImageName))
                     {
                         <img class="card-img-top" width="220" height="220" style="max-height:260;max-width:260" src="~/image/noimage.jpg" asp-append-version="true" />

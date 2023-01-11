@@ -20,7 +20,7 @@ namespace AspNetProjekt.Controllers
 
         public IActionResult Index()
         {
-            return View(_itemService.FindAll());
+            return View("Index",_itemService.FindAll());
         }
 
         public IActionResult CreateItem(ItemDto? itemDto)
@@ -46,23 +46,15 @@ namespace AspNetProjekt.Controllers
 
             if (!ModelState.IsValid)
                 return CreateItem(itemDto);
+            if (itemDto.ItemId != null)
+                return EditItem(itemDto);
             Item item = itemDto.ConvertTo();
 
-            string wwwrootPath = _hostEnvironment.WebRootPath;
-            string fileName = Path.GetFileNameWithoutExtension(itemDto.ImageFile.FileName);
-            string extension = Path.GetExtension(itemDto.ImageFile.FileName);
-            fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-
-            item.ItemImageName = fileName;
-
-            string path = Path.Combine(wwwrootPath + "/image", fileName);
-            using (var fileStream = new FileStream(path, FileMode.Create))
-            {
-                itemDto.ImageFile.CopyTo(fileStream);
-            }
+            if (itemDto.ImageFile is not null)
+                item.ItemImageName = SaveImage(itemDto);
 
             var response = _itemService.Save(item);
-            return View("Index", _itemService.FindAll());
+            return Index();
         }
         public IActionResult CreateCategory()
         {
@@ -80,7 +72,42 @@ namespace AspNetProjekt.Controllers
 
             Category category = categoryDto.ConvertTo();
             var response = _categoryService.Save(category);
-            return View("Index", _itemService.FindAll());
+            return Index();
+        }
+        [HttpGet]
+        public IActionResult EditItem(Guid? id)
+        {
+            if (id is null)
+                return Index();
+            Item? item = _itemService.FindBy(id);
+            if (item is null)
+                return NotFound();
+            ItemDto itemDto = new ItemDto(item);
+            return CreateItem(itemDto);
+        }
+        private IActionResult EditItem(ItemDto itemDto)
+        {
+            Item item = itemDto.ConvertTo();
+            if (itemDto.ImageFile is not null)
+                item.ItemImageName = SaveImage(itemDto);
+            item.ItemId = Guid.Parse(itemDto.ItemId);
+            _itemService.Update(item);
+            return Index();
+        }
+
+        private string SaveImage(ItemDto itemDto)
+        {
+            string wwwrootPath = _hostEnvironment.WebRootPath;
+            string fileName = Path.GetFileNameWithoutExtension(itemDto.ImageFile.FileName);
+            string extension = Path.GetExtension(itemDto.ImageFile.FileName);
+            fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+
+            string path = Path.Combine(wwwrootPath + "/image", fileName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                itemDto.ImageFile.CopyTo(fileStream);
+            }
+            return fileName;
         }
     }
 }

@@ -8,13 +8,28 @@ namespace AspNetProjekt.Models
 {
     public class ItemDto
     {
+        public ItemDto()
+        {
+
+        }
+        public ItemDto(Item item)
+        {
+            ItemId = item.ItemId.ToString();
+            ItemAvalibility = item.ItemAvalibility;
+            ItemDescription = item.ItemDescription;
+            ItemDiscout = item.ItemDiscount;
+            ItemName = item.ItemName;
+            ItemPrice = item.ItemPrice;
+        }
+        [HiddenInput]
+        public string? ItemId { get; set; }
         public string ItemName { get; set; }
         public decimal ItemPrice { get; set; }
         public int ItemDiscout { get; set; }
         public int ItemAvalibility { get; set; }
         public string? ItemDescription { get; set; }
-        [NotMapped] 
-        public IFormFile ImageFile { get; set; }
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
         public List<string>? Categories { get; set; }
         public Item ConvertTo() => new Item()
         {
@@ -27,12 +42,12 @@ namespace AspNetProjekt.Models
             Categories = AssignCategories(Categories)
         };
         [ValidateNever]
-        public List<SelectListItem> categoriesList { get; set; }
+        public List<SelectListItem>? categoriesList { get; set; }
 
         private ISet<Category> AssignCategories(List<string>? ids)
         {
             HashSet<Category> categories = new HashSet<Category>();
-            if(ids is not null)
+            if (ids is not null)
                 foreach (var item in ids)
                     categories.Add(new Category() { CategoryId = Guid.Parse(item) });
             return categories;
