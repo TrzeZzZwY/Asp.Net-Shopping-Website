@@ -12,12 +12,18 @@ builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<MyUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityContext>();
 
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
+});
 
 var app = builder.Build();
 
@@ -33,9 +39,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
+app.UseAuthentication(); ;
 
 app.UseAuthorization();
+
 
 app.MapRazorPages();
 app.MapControllerRoute(
@@ -43,3 +50,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+

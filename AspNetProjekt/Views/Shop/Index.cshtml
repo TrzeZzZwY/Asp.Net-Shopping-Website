@@ -1,15 +1,22 @@
-﻿@model IEnumerable<AspNetProjekt.Models.Item>
-
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model IEnumerable<AspNetProjekt.Models.Item>
+@inject UserManager<MyUser> UserManager
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     ViewData["Title"] = "Sklep";
 }
-<p>
-    <a asp-action="CreateItem">Dodaj nowy produkt</a></br>
-    <a asp-action="CreateCategory">Dodaj nową Kategorię</a>
-</p>
+ <p>
+@if ((await AuthorizationService.AuthorizeAsync(User,"RequireAdmin")).Succeeded)
+{
+    <a class="btn btn-primary" asp-action="CreateItem">Dodaj nowy produkt</a>
+        <a class="btn btn-primary" asp-action="CreateCategory">Dodaj nową Kategorię</a>
+}
+
+</p>  
 <div class="container">
     <div class="row row-cols-3 card-deck">
 
@@ -17,7 +24,10 @@
         {
             <div class="col">
                 <div class="card mb-4" style="width: 18rem;">
+                    @if((await AuthorizationService.AuthorizeAsync(User,"RequireAdmin")).Succeeded){
                     <a asp-action="EditItem" asp-route-id="@item.ItemId" style="position:absolute" class="btn btn-danger d-inline-block m-1">edit</a>
+
+                    }
                     @if (String.IsNullOrEmpty(item.ItemImageName))
                     {
                         <img class="card-img-top" width="220" height="220" style="max-height:260;max-width:260" src="~/image/noimage.jpg" asp-append-version="true" />

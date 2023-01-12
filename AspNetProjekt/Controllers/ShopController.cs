@@ -1,5 +1,7 @@
 ﻿using AspNetProjekt.Models;
 using AspNetProjekt.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -10,12 +12,16 @@ namespace AspNetProjekt.Controllers
         private readonly IItemService _itemService;
         private readonly ICategoryService _categoryService;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly UserManager<MyUser> _userManager;
+        private readonly SignInManager<MyUser> _signInManager;
 
-        public ShopController(IItemService itemService, ICategoryService categoryService, IWebHostEnvironment hostEnvironment)
+        public ShopController(IItemService itemService, ICategoryService categoryService, IWebHostEnvironment hostEnvironment, UserManager<MyUser> userManager, SignInManager<MyUser> signInManager)
         {
             _itemService = itemService;
             _categoryService = categoryService;
             _hostEnvironment = hostEnvironment;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -54,6 +60,7 @@ namespace AspNetProjekt.Controllers
                 item.ItemImageName = SaveImage(itemDto);
 
             var response = _itemService.Save(item);
+
             return Index();
         }
         public IActionResult CreateCategory()
@@ -75,6 +82,7 @@ namespace AspNetProjekt.Controllers
             return Index();
         }
         [HttpGet]
+        [Authorize(Roles ="Admin")]
         public IActionResult EditItem(Guid? id)
         {
             if (id is null)

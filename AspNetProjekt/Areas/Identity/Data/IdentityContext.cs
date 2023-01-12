@@ -22,6 +22,11 @@ public class IdentityContext : IdentityDbContext<MyUser>
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<IdentityRole>().HasData(
+            new IdentityRole() { Id = Guid.NewGuid().ToString(),Name = "Admin",NormalizedName ="ADMIN"},
+            new IdentityRole() { Id = Guid.NewGuid().ToString(),Name = "User",NormalizedName ="USER"}
+            );
+
         builder.Entity<Category>().HasData(
             new Category { CategoryId = Guid.NewGuid(), CategoryName = "Pluszak" },
             new Category { CategoryId = Guid.NewGuid(), CategoryName = "Szalik" },
@@ -88,7 +93,7 @@ public class IdentityContext : IdentityDbContext<MyUser>
             .WithOne(e => e.Transaction)
             .HasForeignKey<Transaction>(e => e.CustomerId);
 
-
+        
         base.OnModelCreating(builder);
     }
 }
