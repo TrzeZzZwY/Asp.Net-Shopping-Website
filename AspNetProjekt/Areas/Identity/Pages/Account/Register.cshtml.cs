@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using AspNetProjekt.Models;
+using AspNetProjekt.Areas.Identity.Data;
 
 namespace AspNetProjekt.Areas.Identity.Pages.Account
 {
@@ -26,6 +27,7 @@ namespace AspNetProjekt.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<MyUser> _signInManager;
         private readonly UserManager<MyUser> _userManager;
+        private readonly IdentityContext _context;
         private readonly IUserStore<MyUser> _userStore;
         private readonly IUserEmailStore<MyUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
@@ -33,6 +35,7 @@ namespace AspNetProjekt.Areas.Identity.Pages.Account
 
         public RegisterModel(
             UserManager<MyUser> userManager,
+            IdentityContext identityContext,
             IUserStore<MyUser> userStore,
             SignInManager<MyUser> signInManager,
             ILogger<RegisterModel> logger,
@@ -40,6 +43,7 @@ namespace AspNetProjekt.Areas.Identity.Pages.Account
         {
             _userManager = userManager;
             _userStore = userStore;
+            _context = identityContext;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
@@ -122,8 +126,14 @@ namespace AspNetProjekt.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
                     var userId = await _userManager.GetUserIdAsync(user);
+                    Customer customer = new Customer()
+                    {
+                        CustomerId = Guid.Parse(userId),
+                        IdentityUserId = userId,
+                    };
+                    _context.Customers.Add(customer);
+                    _context.SaveChanges();
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

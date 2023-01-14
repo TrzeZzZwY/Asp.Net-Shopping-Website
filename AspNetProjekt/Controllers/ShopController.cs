@@ -11,14 +11,18 @@ namespace AspNetProjekt.Controllers
     {
         private readonly IItemService _itemService;
         private readonly ICategoryService _categoryService;
+        private readonly IShoppingCartService _shoppingCartService;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly UserManager<MyUser> _userManager;
         private readonly SignInManager<MyUser> _signInManager;
 
-        public ShopController(IItemService itemService, ICategoryService categoryService, IWebHostEnvironment hostEnvironment, UserManager<MyUser> userManager, SignInManager<MyUser> signInManager)
+        public ShopController(IItemService itemService, ICategoryService categoryService,
+            IShoppingCartService shoppingCartService, IWebHostEnvironment hostEnvironment, 
+            UserManager<MyUser> userManager, SignInManager<MyUser> signInManager)
         {
             _itemService = itemService;
             _categoryService = categoryService;
+            _shoppingCartService = shoppingCartService;
             _hostEnvironment = hostEnvironment;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -116,6 +120,12 @@ namespace AspNetProjekt.Controllers
                 itemDto.ImageFile.CopyTo(fileStream);
             }
             return fileName;
+        }
+        public void AddToShoppingCart(Guid? id)
+        {
+            Item item = _itemService.FindBy(id);
+            Guid userId = Guid.Parse(_userManager.GetUserId(User));
+            _shoppingCartService.AddItemToShoppingCart(item,userId);
         }
     }
 }

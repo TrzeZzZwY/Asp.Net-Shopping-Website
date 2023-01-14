@@ -12,9 +12,10 @@ public class IdentityContext : IdentityDbContext<MyUser>
     public DbSet<ItemLikes> ItemsLikes { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Transaction_Item> Transaction_Items { get; set; }
-    public DbSet<CustomerShoppingCart> UsersShoppingCarts { get; set; }
-    public DbSet<CustomerWishList> UsersWishLists { get; set; }
+    public DbSet<CustomerShoppingCart> CustomersShoppingCarts { get; set; }
+    public DbSet<CustomerWishList> CustomersWishLists { get; set; }
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<CustomerShoppingCart_Item> customerShoppingCart_Items { get; set; }
     public IdentityContext(DbContextOptions<IdentityContext> options)
         : base(options)
     {
@@ -23,8 +24,8 @@ public class IdentityContext : IdentityDbContext<MyUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<IdentityRole>().HasData(
-            new IdentityRole() { Id = Guid.NewGuid().ToString(),Name = "Admin",NormalizedName ="ADMIN"},
-            new IdentityRole() { Id = Guid.NewGuid().ToString(),Name = "User",NormalizedName ="USER"}
+            new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Admin", NormalizedName = "ADMIN" },
+            new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "User", NormalizedName = "USER" }
             );
 
         builder.Entity<Category>().HasData(
@@ -48,21 +49,30 @@ public class IdentityContext : IdentityDbContext<MyUser>
         builder.Entity<Transaction>().HasKey(e => e.TransactionId);
         builder.Entity<Transaction>().Property(e => e.TransactionDate);
 
-        builder.Entity<Transaction_Item>().HasKey(o => new { o.TransactionId, o.ItemId });
+        builder.Entity<Transaction_Item>().HasKey(e => e.Transaction_ItemId);
         builder.Entity<Transaction_Item>().Property(e => e.ItemPrice);
+
+        builder.Entity<CustomerShoppingCart_Item>().HasKey(e => e.CustomerShoppingCart_ItemId);
+        //builder.Entity<CustomerShoppingCart_Item>().Property(e => e.Item);
+        //builder.Entity<CustomerShoppingCart_Item>().Property(e => e.CustomerShoppingCart);
 
         builder.Entity<CustomerShoppingCart>().HasKey(e => e.CustomerId);
 
         builder.Entity<CustomerWishList>().HasKey(o => new { o.CustomerId, o.ItemId });
+        //builder.Entity<CustomerWishList>().Property(e => e.Item);
+        //builder.Entity<CustomerWishList>().Property(e => e.Customer);
 
         builder.Entity<Customer>().HasKey(e => e.CustomerId);
 
         builder.Entity<Item>()
             .HasMany(e => e.Categories)
             .WithMany(e => e.items);
+        builder.Entity<Item>()
+           .HasMany(e => e.CustomerShoppingCart_Item)
+           .WithOne(e => e.Item);
         builder.Entity<CustomerShoppingCart>()
-            .HasMany(e => e.Items)
-            .WithMany(e => e.CustomerShoppingCarts);
+            .HasMany(e => e.CustomerShoppingCart_Items)
+            .WithOne(e => e.CustomerShoppingCart);
         builder.Entity<Item>().
             HasMany(e => e.Transaction_Items).
             WithOne(e => e.Item);
@@ -93,7 +103,7 @@ public class IdentityContext : IdentityDbContext<MyUser>
             .WithOne(e => e.Transaction)
             .HasForeignKey<Transaction>(e => e.CustomerId);
 
-        
+
         base.OnModelCreating(builder);
     }
 }

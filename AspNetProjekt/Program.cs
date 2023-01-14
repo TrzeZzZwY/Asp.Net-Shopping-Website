@@ -17,6 +17,7 @@ builder.Services.AddDefaultIdentity<MyUser>(options => options.SignIn.RequireCon
 
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

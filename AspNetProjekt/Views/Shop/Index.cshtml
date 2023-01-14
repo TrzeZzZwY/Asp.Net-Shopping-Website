@@ -43,7 +43,7 @@
                         <p class="card-text">iloś w magazynie: @Html.DisplayFor(modelItem => item.ItemAvalibility)</p>
                         <a href="#" class="btn btn-primary d-inline-block ">like</a>
                         <a href="#" class="btn btn-secondary d-inline-block">Lista życzeń</a>
-                        <a href="#" class="btn btn-danger d-inline-block">Koszyk</a>
+                        <a asp-action="AddToShoppingCart" asp-route-id="@item.ItemId" class="btn btn-danger d-inline-block">Koszyk</a>
                     </div>
                 </div>
             </div>

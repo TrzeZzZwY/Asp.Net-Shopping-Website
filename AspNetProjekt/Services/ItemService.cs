@@ -19,9 +19,9 @@ namespace AspNetProjekt.Services
                     foreach (var Category in item.Categories)
                         _context.Attach(Category);
 
-                if (item.CustomerShoppingCarts is not null)
-                    foreach (var CustomerShoppingCart in item.CustomerShoppingCarts)
-                        _context.Attach(CustomerShoppingCart);
+                //if (item.CustomerShoppingCarts is not null)
+                //    foreach (var CustomerShoppingCart in item.CustomerShoppingCarts)
+                //        _context.Attach(CustomerShoppingCart);
 
                 if (item.Transaction_Items is not null)
                     foreach (var Transaction_Item in item.Transaction_Items)
@@ -70,7 +70,7 @@ namespace AspNetProjekt.Services
                 find.ItemDiscount = item.ItemDiscount;
                 find.ItemAvalibility = item.ItemAvalibility;
                 find.Categories = item.Categories;
-                find.CustomerShoppingCarts = item.CustomerShoppingCarts;
+              //  find.CustomerShoppingCarts = item.CustomerShoppingCarts;
                 find.Transaction_Items = item.Transaction_Items;
                 find.ItemLikes = item.ItemLikes;
                 find.CustomerWishLists = item.CustomerWishLists;
@@ -107,8 +107,10 @@ namespace AspNetProjekt.Services
         public int? GetWishes(Guid? id)
         {
             return (from i in _context.Items
-                    join wl in _context.UsersWishLists on i.ItemId equals wl.ItemId
+                    join wl in _context.CustomersWishLists on i.ItemId equals wl.ItemId
                     select wl).Count();
         }
+
+
     }
 }

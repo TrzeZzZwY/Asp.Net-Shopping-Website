@@ -7,6 +7,6 @@ namespace AspNetProjekt.Models
         [Key]
         public Guid CustomerId;
         public Customer? Customer;
-        public List<Item>? Items;
+        public List<CustomerShoppingCart_Item>? CustomerShoppingCart_Items;
     }
 }

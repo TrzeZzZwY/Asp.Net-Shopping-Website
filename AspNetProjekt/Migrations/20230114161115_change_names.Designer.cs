@@ -4,6 +4,7 @@ using AspNetProjekt.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetProjekt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230114161115_change_names")]
+    partial class change_names
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,17 +41,17 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = new Guid("2c878ab1-2c25-4d33-82f9-f9b61ac652be"),
+                            CategoryId = new Guid("220df152-cd43-48df-9ff4-3d3ba75766a3"),
                             CategoryName = "Pluszak"
                         },
                         new
                         {
-                            CategoryId = new Guid("e323aa55-cbdb-4347-a9c7-027634c0545a"),
+                            CategoryId = new Guid("8dddac48-7bc7-404e-a8f5-f072070ba704"),
                             CategoryName = "Szalik"
                         },
                         new
                         {
-                            CategoryId = new Guid("c29a4d62-eec8-43cf-9bac-e657d01ff0a3"),
+                            CategoryId = new Guid("ff8ac4a4-e92f-438c-a404-e28696958fee"),
                             CategoryName = "Czapka"
                         });
                 });
@@ -80,27 +82,6 @@ namespace AspNetProjekt.Migrations
                     b.HasKey("CustomerId");
 
                     b.ToTable("CustomersShoppingCarts");
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerShoppingCart_Item", b =>
-                {
-                    b.Property<Guid>("CustomerShoppingCart_ItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CustomerShoppingCartCustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ItemId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CustomerShoppingCart_ItemId");
-
-                    b.HasIndex("CustomerShoppingCartCustomerId");
-
-                    b.HasIndex("ItemId1");
-
-                    b.ToTable("customerShoppingCart_Items");
                 });
 
             modelBuilder.Entity("AspNetProjekt.Models.CustomerWishList", b =>
@@ -256,24 +237,18 @@ namespace AspNetProjekt.Migrations
 
             modelBuilder.Entity("AspNetProjekt.Models.Transaction_Item", b =>
                 {
-                    b.Property<Guid>("Transaction_ItemId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("TransactionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ItemId1")
+                    b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("ItemPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("TransactionId1")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasKey("TransactionId", "ItemId");
 
-                    b.HasKey("Transaction_ItemId");
-
-                    b.HasIndex("ItemId1");
-
-                    b.HasIndex("TransactionId1");
+                    b.HasIndex("ItemId");
 
                     b.ToTable("Transaction_Items");
                 });
@@ -291,6 +266,21 @@ namespace AspNetProjekt.Migrations
                     b.HasIndex("itemsItemId");
 
                     b.ToTable("CategoryItem");
+                });
+
+            modelBuilder.Entity("CustomerShoppingCartItem", b =>
+                {
+                    b.Property<Guid>("CustomerShoppingCartsCustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ItemsItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CustomerShoppingCartsCustomerId", "ItemsItemId");
+
+                    b.HasIndex("ItemsItemId");
+
+                    b.ToTable("CustomerShoppingCartItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -322,15 +312,15 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4c018716-031e-44da-a769-d517ca8c4df5",
-                            ConcurrencyStamp = "cdd22e70-5a4b-48d6-b835-2df680d05ea7",
+                            Id = "5379b186-ba02-4999-9314-6cef260b51ae",
+                            ConcurrencyStamp = "a0cb8c63-accc-438d-ac89-92ad3dbe8d47",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "22c0032f-0cf6-4695-a30c-0d84558a62fc",
-                            ConcurrencyStamp = "4048a8df-9603-49a7-813a-d083b30f5e6d",
+                            Id = "f843ebee-2cd2-4074-a255-e241f68cbfc7",
+                            ConcurrencyStamp = "2170b0c1-8208-4e20-8cc7-a41282436a11",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -466,21 +456,6 @@ namespace AspNetProjekt.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerShoppingCart_Item", b =>
-                {
-                    b.HasOne("AspNetProjekt.Models.CustomerShoppingCart", "CustomerShoppingCart")
-                        .WithMany("CustomerShoppingCart_Items")
-                        .HasForeignKey("CustomerShoppingCartCustomerId");
-
-                    b.HasOne("AspNetProjekt.Models.Item", "Item")
-                        .WithMany("CustomerShoppingCart_Item")
-                        .HasForeignKey("ItemId1");
-
-                    b.Navigation("CustomerShoppingCart");
-
-                    b.Navigation("Item");
-                });
-
             modelBuilder.Entity("AspNetProjekt.Models.CustomerWishList", b =>
                 {
                     b.HasOne("AspNetProjekt.Models.Customer", "Customer")
@@ -534,11 +509,15 @@ namespace AspNetProjekt.Migrations
                 {
                     b.HasOne("AspNetProjekt.Models.Item", "Item")
                         .WithMany("Transaction_Items")
-                        .HasForeignKey("ItemId1");
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("AspNetProjekt.Models.Transaction", "Transaction")
                         .WithMany("transaction_Items")
-                        .HasForeignKey("TransactionId1");
+                        .HasForeignKey("TransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Item");
 
@@ -556,6 +535,21 @@ namespace AspNetProjekt.Migrations
                     b.HasOne("AspNetProjekt.Models.Item", null)
                         .WithMany()
                         .HasForeignKey("itemsItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CustomerShoppingCartItem", b =>
+                {
+                    b.HasOne("AspNetProjekt.Models.CustomerShoppingCart", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerShoppingCartsCustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AspNetProjekt.Models.Item", null)
+                        .WithMany()
+                        .HasForeignKey("ItemsItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -622,15 +616,8 @@ namespace AspNetProjekt.Migrations
                     b.Navigation("Transaction");
                 });
 
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerShoppingCart", b =>
-                {
-                    b.Navigation("CustomerShoppingCart_Items");
-                });
-
             modelBuilder.Entity("AspNetProjekt.Models.Item", b =>
                 {
-                    b.Navigation("CustomerShoppingCart_Item");
-
                     b.Navigation("CustomerWishLists");
 
                     b.Navigation("ItemLikes");

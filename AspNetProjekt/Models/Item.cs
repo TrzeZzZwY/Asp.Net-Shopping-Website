@@ -13,7 +13,7 @@ namespace AspNetProjekt.Models
         public string? ItemImageName;
         public string? ItemDescription;
         public ISet<Category>? Categories;
-        public List<CustomerShoppingCart>? CustomerShoppingCarts;
+        public List<CustomerShoppingCart_Item>? CustomerShoppingCart_Item;
         public List<Transaction_Item>? Transaction_Items;
         public List<ItemLikes>? ItemLikes;
         public List<CustomerWishList>? CustomerWishLists;
