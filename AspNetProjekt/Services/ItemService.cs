@@ -19,9 +19,9 @@ namespace AspNetProjekt.Services
                     foreach (var Category in item.Categories)
                         _context.Attach(Category);
 
-                //if (item.CustomerShoppingCarts is not null)
-                //    foreach (var CustomerShoppingCart in item.CustomerShoppingCarts)
-                //        _context.Attach(CustomerShoppingCart);
+                if (item.CustomerShoppingCart_Item is not null)
+                    foreach (var CustomerShoppingCart in item.CustomerShoppingCart_Item)
+                        _context.Attach(CustomerShoppingCart);
 
                 if (item.Transaction_Items is not null)
                     foreach (var Transaction_Item in item.Transaction_Items)
@@ -70,7 +70,7 @@ namespace AspNetProjekt.Services
                 find.ItemDiscount = item.ItemDiscount;
                 find.ItemAvalibility = item.ItemAvalibility;
                 find.Categories = item.Categories;
-              //  find.CustomerShoppingCarts = item.CustomerShoppingCarts;
+                find.CustomerShoppingCart_Item = item.CustomerShoppingCart_Item;
                 find.Transaction_Items = item.Transaction_Items;
                 find.ItemLikes = item.ItemLikes;
                 find.CustomerWishLists = item.CustomerWishLists;

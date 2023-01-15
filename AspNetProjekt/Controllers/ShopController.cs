@@ -121,11 +121,19 @@ namespace AspNetProjekt.Controllers
             }
             return fileName;
         }
-        public void AddToShoppingCart(Guid? id)
+        [HttpPost]
+        public void AddToShoppingCart([FromBody] string id)
         {
-            Item item = _itemService.FindBy(id);
+            Item item = _itemService.FindBy(Guid.Parse(id));
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
             _shoppingCartService.AddItemToShoppingCart(item,userId);
         }
+
+        [HttpPost]
+        public JsonResult AjaxMethod([FromBody] string test)
+        {
+            return Json(test);
+        }
+
     }
 }
