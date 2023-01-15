@@ -4,6 +4,6 @@ namespace AspNetProjekt.Models
 {
     public class MyUser : IdentityUser
     {
-        public Customer? customer;
+        public Customer? customer { get; set; }
     }
 }

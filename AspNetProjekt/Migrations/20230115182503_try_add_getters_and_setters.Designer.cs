@@ -4,6 +4,7 @@ using AspNetProjekt.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetProjekt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230115182503_try_add_getters_and_setters")]
+    partial class try_add_getters_and_setters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,17 +41,17 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = new Guid("e60b53aa-e53d-4488-ad5e-339ac3601e62"),
+                            CategoryId = new Guid("9316d2d1-7d09-4e67-ac54-25f4db0dffed"),
                             CategoryName = "Pluszak"
                         },
                         new
                         {
-                            CategoryId = new Guid("966fce01-fd7b-4478-9b9e-d3efd46680e1"),
+                            CategoryId = new Guid("21e42ca4-df01-4b70-bcbd-0fa1f4feb727"),
                             CategoryName = "Szalik"
                         },
                         new
                         {
-                            CategoryId = new Guid("5321ce88-885c-47f7-869c-97fa539ab435"),
+                            CategoryId = new Guid("7f7e31e9-f829-4e8e-bb1c-dea03bba0dad"),
                             CategoryName = "Czapka"
                         });
                 });
@@ -60,20 +62,8 @@ namespace AspNetProjekt.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerShoppingCartsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomerWishListId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("IdentityUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("ItemLikesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TransactionId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("CustomerId");
 
@@ -272,20 +262,20 @@ namespace AspNetProjekt.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ItemId")
+                    b.Property<Guid?>("ItemId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("ItemPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("TransactionId")
+                    b.Property<Guid?>("TransactionId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Transaction_ItemId");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("ItemId1");
 
-                    b.HasIndex("TransactionId");
+                    b.HasIndex("TransactionId1");
 
                     b.ToTable("Transaction_Items");
                 });
@@ -334,15 +324,15 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "925f9a8a-474b-4651-ad8d-49a6215b392e",
-                            ConcurrencyStamp = "844db6fb-0583-4279-a89c-bb2fcb27c9a2",
+                            Id = "02c3498f-432a-4cf6-b863-6d640a18d33b",
+                            ConcurrencyStamp = "eaa5f63a-9b19-4efb-ac4a-ba1102dc026a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0fecc050-7066-4853-b838-f858b3e14405",
-                            ConcurrencyStamp = "b62dfca9-8d10-4696-a745-1a2fbb1a9f1a",
+                            Id = "44a07b65-5847-4882-8003-1d35dafbe9f9",
+                            ConcurrencyStamp = "662190b5-d5c9-46eb-a264-2a92f8e5dee3",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -550,15 +540,11 @@ namespace AspNetProjekt.Migrations
                 {
                     b.HasOne("AspNetProjekt.Models.Item", "Item")
                         .WithMany("Transaction_Items")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ItemId1");
 
                     b.HasOne("AspNetProjekt.Models.Transaction", "Transaction")
                         .WithMany("transaction_Items")
-                        .HasForeignKey("TransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TransactionId1");
 
                     b.Navigation("Item");
 

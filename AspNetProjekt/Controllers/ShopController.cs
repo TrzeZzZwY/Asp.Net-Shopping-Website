@@ -129,6 +129,28 @@ namespace AspNetProjekt.Controllers
             _shoppingCartService.AddItemToShoppingCart(item,userId);
         }
 
+        public IActionResult MyCart()
+        {
+            List<ShoppingCartItemDbo> shoppingCartItemDbo = new List<ShoppingCartItemDbo>();
+            Guid userId = Guid.Parse(_userManager.GetUserId(User));
+            var itemsInCart = _shoppingCartService.FindAllItemsInCartBy(userId);
+            foreach (var itemInCart in itemsInCart)
+            {
+                Item? item = _itemService.FindBy(itemInCart.ItemId);
+                if (item is null)
+                    throw new Exception();
+                shoppingCartItemDbo.Add(new ShoppingCartItemDbo()
+                {
+                    ItemId = item.ItemId,
+                    ItemImageName = item.ItemImageName,
+                    ItemPrice = item.ItemPrice,
+                    ItemName = item.ItemName,
+                    CustomerShoppingCartItemId = itemInCart.CustomerShoppingCart_ItemId
+                });
+            }
+            return View("MyCart", shoppingCartItemDbo);
+        }
+
         [HttpPost]
         public JsonResult AjaxMethod([FromBody] string test)
         {

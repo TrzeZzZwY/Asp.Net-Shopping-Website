@@ -7,7 +7,6 @@ using AspNetProjekt.Models;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
 
-builder.Services.AddRazorPages();
 builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -18,6 +17,7 @@ builder.Services.AddDefaultIdentity<MyUser>(options => options.SignIn.RequireCon
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddRazorPages();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

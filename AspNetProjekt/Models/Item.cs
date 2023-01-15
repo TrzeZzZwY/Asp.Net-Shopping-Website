@@ -5,17 +5,17 @@ namespace AspNetProjekt.Models
     public class Item
     {
         [Key]
-        public Guid ItemId;
-        public string ItemName;
-        public decimal ItemPrice;
-        public int ItemDiscount;
-        public int ItemAvalibility;
-        public string? ItemImageName;
-        public string? ItemDescription;
-        public ISet<Category>? Categories;
-        public List<CustomerShoppingCart_Item>? CustomerShoppingCart_Item;
-        public List<Transaction_Item>? Transaction_Items;
-        public List<ItemLikes>? ItemLikes;
-        public List<CustomerWishList>? CustomerWishLists;
+        public Guid ItemId { get; set; }
+        public string ItemName { get; set; }
+        public decimal ItemPrice { get; set; }
+        public int ItemDiscount { get; set; }
+        public int ItemAvalibility { get; set; }
+        public string? ItemImageName { get; set; }
+        public string? ItemDescription { get; set; }
+        public ISet<Category>? Categories { get; set; }
+        public List<CustomerShoppingCart_Item>? CustomerShoppingCart_Item { get; set; }
+        public List<Transaction_Item>? Transaction_Items { get; set; }
+        public List<ItemLikes>? ItemLikes { get; set; }
+        public List<CustomerWishList>? CustomerWishLists { get; set; }
     }
 }

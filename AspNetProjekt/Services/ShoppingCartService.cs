@@ -81,7 +81,7 @@ namespace AspNetProjekt.Services
             var cart = FindBy(UserId);
             if (cart is null)
                 return new List<CustomerShoppingCart_Item>();
-            var list = _context.customerShoppingCart_Items.Where(e => e.CustomerShoppingCartId == UserId).ToList();
+            var list = _context.customerShoppingCart_Items.ToList();
             if (list is null)
                 return new List<CustomerShoppingCart_Item>();
             return list;

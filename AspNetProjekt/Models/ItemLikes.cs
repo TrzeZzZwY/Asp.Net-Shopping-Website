@@ -5,10 +5,10 @@ namespace AspNetProjekt.Models
     public class ItemLikes
     {
         [Key]
-        public Guid CustomerId;
-        public Customer? Customer;
+        public Guid CustomerId { get; set; }
+        public Customer? Customer { get; set; }
         [Key]
-        public Guid ItemId;
-        public Item? Item;
+        public Guid ItemId { get; set; }
+        public Item? Item { get; set; }
     }
 }

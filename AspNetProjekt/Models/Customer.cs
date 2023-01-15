@@ -4,20 +4,20 @@ namespace AspNetProjekt.Models
 {
     public class Customer
     {
-        public Guid CustomerId;
-        public string? IdentityUserId;
-        public MyUser? IdentityUser;
+        public Guid CustomerId { get; set; }
+        public string? IdentityUserId { get; set; }
+        public MyUser? IdentityUser { get; set; }
 
-        public Guid CustomerShoppingCartsId;
-        public CustomerShoppingCart? CustomerShoppingCart;
+        public Guid CustomerShoppingCartsId { get; set; }
+        public CustomerShoppingCart? CustomerShoppingCart { get; set; }
 
-        public Guid CustomerWishListId;
-        public CustomerWishList? CustomerWishList;
+        public Guid CustomerWishListId { get; set; }
+        public CustomerWishList? CustomerWishList { get; set; }
 
-        public Guid ItemLikesId;
-        public ItemLikes? ItemLikes;
+        public Guid ItemLikesId { get; set; }
+        public ItemLikes? ItemLikes { get; set; }
 
-        public Guid TransactionId;
-        public Transaction? Transaction;
+        public Guid TransactionId { get; set; }
+        public Transaction? Transaction { get; set; }
     }
 }
