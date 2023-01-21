@@ -16,8 +16,6 @@ namespace AspNetProjekt.Models
 
         public Guid ItemLikesId { get; set; }
         public ItemLikes? ItemLikes { get; set; }
-
-        public Guid TransactionId { get; set; }
-        public Transaction? Transaction { get; set; }
+        public ISet<Transaction> Transactions { get; set; }
     }
 }

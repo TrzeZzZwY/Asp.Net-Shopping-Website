@@ -55,7 +55,7 @@ else
         </tbody>
     </table>
     <p>suma = @Model.Sum(e=> e.ItemPrice) </p>
-    <a class="btn btn-primary">Zapłać</a>
+    <a class="btn btn-primary" onclick="BuyAllInCart()">Zapłać</a>
     <script>
         function RemoveItemFromCart(str) {
           var request = new XMLHttpRequest();
@@ -70,6 +70,22 @@ else
             }
           };
         request.send(JSON.stringify(str));
+        location.reload(true);
+        }
+
+         function BuyAllInCart() {
+          var request = new XMLHttpRequest();
+          request.onreadystatechange = function() {
+          };
+          var url = "/Cart/BuyAllInCart";
+          request.open("POST", url, false);
+          request.setRequestHeader("Content-Type", "application/json");
+          request.onreadystatechange = function () {
+            if (request.readyState == 4 && request.status == 200) {
+                location.reload(true);
+            }
+          };
+        request.send(JSON.stringify());
         location.reload(true);
         }
     </script>

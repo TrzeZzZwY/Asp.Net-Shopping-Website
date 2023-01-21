@@ -1,5 +1,6 @@
 ﻿using AspNetProjekt.Models;
 using AspNetProjekt.Services;
+using AspNetProjekt.Services.interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,22 +9,17 @@ namespace AspNetProjekt.Controllers
     public class CartController : Controller
     {
         private readonly IItemService _itemService;
-        private readonly ICategoryService _categoryService;
         private readonly IShoppingCartService _shoppingCartService;
-        private readonly IWebHostEnvironment _hostEnvironment;
         private readonly UserManager<MyUser> _userManager;
-        private readonly SignInManager<MyUser> _signInManager;
+        private readonly ITransactionService _transactionService;
 
-        public CartController(IItemService itemService, ICategoryService categoryService,
-            IShoppingCartService shoppingCartService, IWebHostEnvironment hostEnvironment,
-            UserManager<MyUser> userManager, SignInManager<MyUser> signInManager)
+        public CartController(IItemService itemService, IShoppingCartService shoppingCartService,
+            UserManager<MyUser> userManager, ITransactionService transactionService)
         {
             _itemService = itemService;
-            _categoryService = categoryService;
             _shoppingCartService = shoppingCartService;
-            _hostEnvironment = hostEnvironment;
             _userManager = userManager;
-            _signInManager = signInManager;
+            _transactionService = transactionService;
         }
 
         [HttpPost]
@@ -43,8 +39,16 @@ namespace AspNetProjekt.Controllers
         public IActionResult MyCart()
         {
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
-            var shoppingCartItemDbo = _shoppingCartService.FillAllItemsInCartDboBy(userId);
+            var shoppingCartItemDbo = _shoppingCartService.FindAllItemsInCartDboBy(userId);
             return View("MyCart", shoppingCartItemDbo);
         }
+        [HttpPost]
+        public void BuyAllInCart()
+        {
+            Guid userId = Guid.Parse(_userManager.GetUserId(User));
+            CustomerShoppingCart shoppingCart= _shoppingCartService.FindBy(userId);
+            _transactionService.Save(shoppingCart);
+            _shoppingCartService.DeleteAll(userId);
+        } 
     }
 }

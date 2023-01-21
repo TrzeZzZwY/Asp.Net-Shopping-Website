@@ -101,8 +101,7 @@ public class IdentityContext : IdentityDbContext<MyUser>
             .WithOne(e => e.ItemLikes);
         builder.Entity<Transaction>()
             .HasOne(e => e.Customer)
-            .WithOne(e => e.Transaction)
-            .HasForeignKey<Transaction>(e => e.CustomerId);
+            .WithMany(e => e.Transactions);
 
 
         base.OnModelCreating(builder);

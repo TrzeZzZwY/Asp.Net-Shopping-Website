@@ -75,7 +75,7 @@ namespace AspNetProjekt.Services
             var cart = FindBy(UserId);
             if (cart is null)
                 return new List<CustomerShoppingCart_Item>();
-            var list = _context.customerShoppingCart_Items.ToList();
+            var list = _context.customerShoppingCart_Items.Where(e=> e.CustomerShoppingCart == cart).ToList();
             foreach (var item in list)
             {
                 _context.Entry(item).Reference(e => e.Item).Load();
@@ -87,7 +87,9 @@ namespace AspNetProjekt.Services
 
         public CustomerShoppingCart? FindBy(Guid? id)
         {
-            return _context.CustomersShoppingCarts.Find(id);
+            CustomerShoppingCart? shoppingCart = _context.CustomersShoppingCarts.Find(id);
+            _context.Entry(shoppingCart).Collection(e => e.CustomerShoppingCart_Items).Load();
+            return shoppingCart;
         }
         public CustomerShoppingCart_Item? FindItemInCartBy(Guid? id)
         {
@@ -145,7 +147,7 @@ namespace AspNetProjekt.Services
             }
         }
 
-        public ICollection<ShoppingCartItemDbo> FillAllItemsInCartDboBy(Guid? UserId)
+        public ICollection<ShoppingCartItemDbo> FindAllItemsInCartDboBy(Guid? UserId)
         {
             List<ShoppingCartItemDbo> shoppingCartItemDbo = new List<ShoppingCartItemDbo>();
             var itemsInCart = FindAllItemsInCartBy(UserId);
@@ -157,6 +159,7 @@ namespace AspNetProjekt.Services
                     ItemImageName = itemInCart.Item.ItemImageName,
                     ItemPrice = itemInCart.Item.ItemPrice,
                     ItemName = itemInCart.Item.ItemName,
+                    ItemDiscount = itemInCart.Item.ItemDiscount,
                     CustomerShoppingCartItemId = itemInCart.CustomerShoppingCart_ItemId
                 });
             }

@@ -17,7 +17,7 @@ namespace AspNetProjekt.Controllers
         private readonly SignInManager<MyUser> _signInManager;
 
         public ShopController(IItemService itemService, ICategoryService categoryService,
-            IShoppingCartService shoppingCartService, IWebHostEnvironment hostEnvironment, 
+            IShoppingCartService shoppingCartService, IWebHostEnvironment hostEnvironment,
             UserManager<MyUser> userManager, SignInManager<MyUser> signInManager)
         {
             _itemService = itemService;
@@ -30,7 +30,7 @@ namespace AspNetProjekt.Controllers
 
         public IActionResult Index()
         {
-            return View("Index",_itemService.FindAll());
+            return View("Index", _itemService.FindAll());
         }
 
         public IActionResult CreateItem(ItemDto? itemDto)
@@ -86,7 +86,7 @@ namespace AspNetProjekt.Controllers
             return Index();
         }
         [HttpGet]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditItem(Guid? id)
         {
             if (id is null)
@@ -121,7 +121,7 @@ namespace AspNetProjekt.Controllers
             }
             return fileName;
         }
-       
+
 
         [HttpPost]
         public JsonResult AjaxMethod([FromBody] string test)

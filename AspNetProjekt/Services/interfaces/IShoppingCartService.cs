@@ -16,7 +16,7 @@ namespace AspNetProjekt.Services
         public CustomerShoppingCart_Item? FindItemInCartBy(Guid? id);
 
         public ICollection<CustomerShoppingCart_Item> FindAllItemsInCartBy(Guid? UserId);
-        public ICollection<ShoppingCartItemDbo> FillAllItemsInCartDboBy(Guid? UserId);
+        public ICollection<ShoppingCartItemDbo> FindAllItemsInCartDboBy(Guid? UserId);
 
         public bool Add(Item Item, Guid UserId);
     }

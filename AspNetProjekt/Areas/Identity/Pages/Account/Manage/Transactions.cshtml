@@ -1,0 +1,41 @@
+﻿@page
+@model AspNetProjekt.Areas.Identity.Pages.Account.Manage.TransactionsModel
+@{
+ <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Data
+                </th>
+                <th>
+                    identyfikator tranzakcji
+                </th>
+                <th>
+                    kwota
+                </th>
+                <th>
+                    
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.transactions)
+            {
+                <tr>
+                    <td>
+                       @item.TransactionDate
+                    </td>
+                    <td>
+                        @item.TransactionId
+                    </td>
+                    <td>
+                        @item.transaction_Items.Sum(e => e.ItemPrice)
+                    </td>
+                    <td>
+                        <a class="btn btn-primary">szczegóły</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

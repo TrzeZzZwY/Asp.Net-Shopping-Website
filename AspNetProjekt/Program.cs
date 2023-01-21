@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AspNetProjekt.Areas.Identity.Data;
 using AspNetProjekt.Services;
 using AspNetProjekt.Models;
+using AspNetProjekt.Services.interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
@@ -14,9 +15,11 @@ builder.Services.AddDefaultIdentity<MyUser>(options => options.SignIn.RequireCon
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityContext>();
 
+builder.Services.AddSingleton<IClockProvider, DefaultClock>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddRazorPages();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
