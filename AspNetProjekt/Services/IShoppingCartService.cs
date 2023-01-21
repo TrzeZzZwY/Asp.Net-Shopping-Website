@@ -6,7 +6,7 @@ namespace AspNetProjekt.Services
     {
         public bool Save(CustomerShoppingCart shoppingCart);
 
-        public bool Delete(Guid? id, Guid UserId);
+        public bool Delete(Guid itemId, Guid UserId);
 
         public bool DeleteAll(Guid UserId);
         public bool Update(CustomerShoppingCart shoppingCart);
@@ -16,7 +16,8 @@ namespace AspNetProjekt.Services
         public CustomerShoppingCart_Item? FindItemInCartBy(Guid? id);
 
         public ICollection<CustomerShoppingCart_Item> FindAllItemsInCartBy(Guid? UserId);
+        public ICollection<ShoppingCartItemDbo> FillAllItemsInCartDboBy(Guid? UserId);
 
-        public bool AddItemToShoppingCart(Item Item, Guid UserId);
+        public bool Add(Item Item, Guid UserId);
     }
 }

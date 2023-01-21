@@ -33,6 +33,7 @@ public class IdentityContext : IdentityDbContext<MyUser>
             new Category { CategoryId = Guid.NewGuid(), CategoryName = "Szalik" },
             new Category { CategoryId = Guid.NewGuid(), CategoryName = "Czapka" }
             );
+
         builder.Entity<Category>().HasKey(e => e.CategoryId);
         builder.Entity<Category>().Property(e => e.CategoryName);
 

@@ -24,6 +24,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("RequireUser", policy => policy.RequireRole("User"));
 });
 
 var app = builder.Build();

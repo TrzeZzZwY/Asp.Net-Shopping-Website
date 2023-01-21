@@ -11,7 +11,7 @@ namespace AspNetProjekt.Services
         {
             _context = identityContext;
         }
-        public bool AddItemToShoppingCart(Item item, Guid UserId)
+        public bool Add(Item item, Guid UserId)
         {
             try
             {
@@ -46,21 +46,15 @@ namespace AspNetProjekt.Services
 
         }
 
-        public bool Delete(Guid? id, Guid UserId)
+        public bool Delete(Guid itemId, Guid UserId)
         {
             try
             {
-                if (id is null)
-                    return false;
-
                 CustomerShoppingCart shoppingCart = _context.CustomersShoppingCarts.Find(UserId);
                 if (shoppingCart is null)
                     return false;
 
-                var item = FindItemInCartBy(id);
-                if (item is null)
-                    return false;
-
+                var item = _context.customerShoppingCart_Items.Find(itemId);
                 _context.customerShoppingCart_Items.Remove(item);
                 _context.SaveChanges();
                 return true;
@@ -82,6 +76,10 @@ namespace AspNetProjekt.Services
             if (cart is null)
                 return new List<CustomerShoppingCart_Item>();
             var list = _context.customerShoppingCart_Items.ToList();
+            foreach (var item in list)
+            {
+                _context.Entry(item).Reference(e => e.Item).Load();
+            }
             if (list is null)
                 return new List<CustomerShoppingCart_Item>();
             return list;
@@ -145,6 +143,24 @@ namespace AspNetProjekt.Services
             {
                 return false;
             }
+        }
+
+        public ICollection<ShoppingCartItemDbo> FillAllItemsInCartDboBy(Guid? UserId)
+        {
+            List<ShoppingCartItemDbo> shoppingCartItemDbo = new List<ShoppingCartItemDbo>();
+            var itemsInCart = FindAllItemsInCartBy(UserId);
+            foreach (var itemInCart in itemsInCart)
+            {
+                shoppingCartItemDbo.Add(new ShoppingCartItemDbo()
+                {
+                    ItemId = itemInCart.ItemId,
+                    ItemImageName = itemInCart.Item.ItemImageName,
+                    ItemPrice = itemInCart.Item.ItemPrice,
+                    ItemName = itemInCart.Item.ItemName,
+                    CustomerShoppingCartItemId = itemInCart.CustomerShoppingCart_ItemId
+                });
+            }
+            return shoppingCartItemDbo;
         }
     }
 }
