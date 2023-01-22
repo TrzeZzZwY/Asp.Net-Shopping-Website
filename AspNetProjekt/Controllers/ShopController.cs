@@ -32,7 +32,7 @@ namespace AspNetProjekt.Controllers
         {
             return View("Index", _itemService.FindAll());
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateItem(ItemDto? itemDto)
         {
             if (itemDto is null)
@@ -49,6 +49,7 @@ namespace AspNetProjekt.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateItemForm([FromForm] ItemDto? itemDto)
         {
             if (itemDto is null)
@@ -67,12 +68,14 @@ namespace AspNetProjekt.Controllers
 
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateCategory()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateCategory([FromForm] CategoryDto? categoryDto)
         {
             if (categoryDto is null)
@@ -97,16 +100,20 @@ namespace AspNetProjekt.Controllers
             ItemDto itemDto = new ItemDto(item);
             return CreateItem(itemDto);
         }
+        [Authorize(Roles = "Admin")]
         private IActionResult EditItem(ItemDto itemDto)
         {
             Item item = itemDto.ConvertTo();
             if (itemDto.ImageFile is not null)
+            {
+                DeleteImage(itemDto);
                 item.ItemImageName = SaveImage(itemDto);
+            }
             item.ItemId = Guid.Parse(itemDto.ItemId);
             _itemService.Update(item);
             return Index();
         }
-
+        [Authorize(Roles = "Admin")]
         private string SaveImage(ItemDto itemDto)
         {
             string wwwrootPath = _hostEnvironment.WebRootPath;
@@ -120,6 +127,24 @@ namespace AspNetProjekt.Controllers
                 itemDto.ImageFile.CopyTo(fileStream);
             }
             return fileName;
+        }
+        private void DeleteImage(ItemDto itemDto)
+        {
+            Item item = _itemService.FindBy(Guid.Parse(itemDto.ItemId));
+            if (item.ItemImageName is null)
+                return;
+            try
+            {
+                string wwwrootPath = _hostEnvironment.WebRootPath;
+                string path = Path.Combine(wwwrootPath + "/image", item.ItemImageName);
+                System.IO.File.Delete(path);
+            }
+            catch
+            {   
+
+                return;
+            }
+            
         }
 
 

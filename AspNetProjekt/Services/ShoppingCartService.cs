@@ -79,7 +79,15 @@ namespace AspNetProjekt.Services
 
         public CustomerShoppingCart? FindBy(Guid? id)
         {
-            CustomerShoppingCart? shoppingCart = _context.CustomersShoppingCarts.Find(id);
+            if (id is null)
+                return null;
+            Guid UserId = id ?? Guid.Empty;
+            if (UserId == Guid.Empty)
+                return null;
+            CustomerShoppingCart? shoppingCart = _context.CustomersShoppingCarts.Find(UserId);
+            
+            if (shoppingCart is null)
+                shoppingCart = Create(UserId);
             _context.Entry(shoppingCart).Collection(e => e.CustomerShoppingCart_Items).Load();
             return shoppingCart;
         }

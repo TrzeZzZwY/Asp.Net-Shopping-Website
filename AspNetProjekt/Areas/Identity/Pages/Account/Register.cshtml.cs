@@ -135,11 +135,9 @@ namespace AspNetProjekt.Areas.Identity.Pages.Account
                         CustomerId = Guid.Parse(userId),
                         IdentityUserId = userId,
                     };
-                    if (!_roleManager.RoleExistsAsync("User").Result)
-                    {
-                        _roleManager.CreateAsync(new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "User", NormalizedName = "USER" });
-                    }
-                    _userManager.AddToRoleAsync(user, "User");
+                    _context.SaveChanges();
+
+                    await _userManager.AddToRoleAsync(user, "User");
                     _context.Customers.Add(customer);
                     _context.SaveChanges();
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

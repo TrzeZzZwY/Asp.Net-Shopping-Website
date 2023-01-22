@@ -4,6 +4,7 @@ using AspNetProjekt.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetProjekt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230122185735_likes_and_wishes")]
+    partial class likes_and_wishes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,17 +41,17 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = new Guid("58a8e004-3767-4041-9c17-b7d6167f21c6"),
+                            CategoryId = new Guid("201a50b9-2b0d-4d31-9228-bf0a76a278b2"),
                             CategoryName = "Pluszak"
                         },
                         new
                         {
-                            CategoryId = new Guid("c3b9a9a3-9083-4267-8022-de0c383b1043"),
+                            CategoryId = new Guid("414d95f5-765b-407e-8c32-bcba94adc248"),
                             CategoryName = "Szalik"
                         },
                         new
                         {
-                            CategoryId = new Guid("7e63ceb5-7983-4264-a54f-0c05185d7ac9"),
+                            CategoryId = new Guid("d9f868c2-3d98-4320-8f86-93158c25db1f"),
                             CategoryName = "Czapka"
                         });
                 });
@@ -271,7 +273,7 @@ namespace AspNetProjekt.Migrations
 
                     b.HasIndex("ItemLikesItemId");
 
-                    b.ToTable("Item_Customer_Likes", (string)null);
+                    b.ToTable("CustomerItem");
                 });
 
             modelBuilder.Entity("CustomerItem1", b =>
@@ -286,7 +288,7 @@ namespace AspNetProjekt.Migrations
 
                     b.HasIndex("CustomerWishListItemId");
 
-                    b.ToTable("Item_Costomer_Wishes", (string)null);
+                    b.ToTable("CustomerItem1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -318,15 +320,15 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fac30df4-d21a-408b-9071-ae8974791592",
-                            ConcurrencyStamp = "20c815d5-14a4-4315-8688-6720c8eee23c",
+                            Id = "2121f5e9-19df-45cc-a43d-737f1cf7bae4",
+                            ConcurrencyStamp = "cf9ce213-00c5-4e3d-a3bf-2a8a9658b038",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "af0ca718-e976-4c3e-92ad-5109576e996b",
-                            ConcurrencyStamp = "9eecf99f-6ad0-413f-881e-1a4d92ef83f1",
+                            Id = "4f25d739-730c-4cc1-b514-322e74338ac7",
+                            ConcurrencyStamp = "1d2e4513-f5b4-40f8-91ac-7fb23003b787",
                             Name = "User",
                             NormalizedName = "USER"
                         });

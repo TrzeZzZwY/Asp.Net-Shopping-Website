@@ -61,7 +61,7 @@
                     }
                     else
                     {
-                        <img class="card-img-top" width="220" height="220" style="max-height:260;max-width:260" src="@("~/image/"+item.ItemImageName)" asp-append-version="true" />
+                        <img class="card-img-top" width="220" height="220" style="max-height:260;max-width:260" src="@("~/image/"+item.ItemImageName)" alt="img" asp-append-version="true" />
                     }
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemName)</h5>

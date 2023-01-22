@@ -9,11 +9,9 @@ public class IdentityContext : IdentityDbContext<MyUser>
 {
     public DbSet<Category> Categories { get; set; }
     public DbSet<Item> Items { get; set; }
-    public DbSet<ItemLikes> ItemsLikes { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Transaction_Item> Transaction_Items { get; set; }
     public DbSet<CustomerShoppingCart> CustomersShoppingCarts { get; set; }
-    public DbSet<CustomerWishList> CustomersWishLists { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<CustomerShoppingCart_Item> customerShoppingCart_Items { get; set; }
     public IdentityContext(DbContextOptions<IdentityContext> options)
@@ -45,7 +43,6 @@ public class IdentityContext : IdentityDbContext<MyUser>
         builder.Entity<Item>().Property(e => e.ItemImageName);
         builder.Entity<Item>().Property(e => e.ItemDescription);
 
-        builder.Entity<ItemLikes>().HasKey(o => new { o.CustomerId, o.ItemId });
 
         builder.Entity<Transaction>().HasKey(e => e.TransactionId);
         builder.Entity<Transaction>().Property(e => e.TransactionDate);
@@ -54,14 +51,9 @@ public class IdentityContext : IdentityDbContext<MyUser>
         builder.Entity<Transaction_Item>().Property(e => e.ItemPrice);
 
         builder.Entity<CustomerShoppingCart_Item>().HasKey(e => e.CustomerShoppingCart_ItemId);
-        //builder.Entity<CustomerShoppingCart_Item>().Property(e => e.Item);
-        //builder.Entity<CustomerShoppingCart_Item>().Property(e => e.CustomerShoppingCart);
 
         builder.Entity<CustomerShoppingCart>().HasKey(e => e.CustomerId);
 
-        builder.Entity<CustomerWishList>().HasKey(o => new { o.CustomerId, o.ItemId });
-        //builder.Entity<CustomerWishList>().Property(e => e.Item);
-        //builder.Entity<CustomerWishList>().Property(e => e.Customer);
 
         builder.Entity<Customer>().HasKey(e => e.CustomerId);
 
@@ -82,10 +74,12 @@ public class IdentityContext : IdentityDbContext<MyUser>
             .WithOne(e => e.Transaction);
         builder.Entity<Item>().
             HasMany(e => e.ItemLikes)
-            .WithOne(e => e.Item);
+            .WithMany(e => e.ItemLikes)
+            .UsingEntity(j => j.ToTable("Item_Customer_Likes"));
         builder.Entity<Item>()
-            .HasMany(e => e.CustomerWishLists)
-            .WithOne(e => e.Item);
+            .HasMany(e => e.CustomerWishList)
+            .WithMany(e => e.CustomerWishList)
+            .UsingEntity(j => j.ToTable("Item_Costomer_Wishes"));
         builder.Entity<Customer>()
             .HasOne(e => e.IdentityUser)
             .WithOne(e => e.customer)
@@ -93,12 +87,6 @@ public class IdentityContext : IdentityDbContext<MyUser>
         builder.Entity<CustomerShoppingCart>()
             .HasOne(e => e.Customer)
             .WithOne(e => e.CustomerShoppingCart);
-        builder.Entity<CustomerWishList>()
-            .HasOne(e => e.Customer)
-            .WithOne(e => e.CustomerWishList);
-        builder.Entity<ItemLikes>()
-            .HasOne(e => e.Customer)
-            .WithOne(e => e.ItemLikes);
         builder.Entity<Transaction>()
             .HasOne(e => e.Customer)
             .WithMany(e => e.Transactions);

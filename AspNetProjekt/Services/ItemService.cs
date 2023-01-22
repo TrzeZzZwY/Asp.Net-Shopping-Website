@@ -31,8 +31,8 @@ namespace AspNetProjekt.Services
                     foreach (var ItemLike in item.ItemLikes)
                         _context.Attach(ItemLike);
 
-                if (item.CustomerWishLists is not null)
-                    foreach (var CustomerWishList in item.CustomerWishLists)
+                if (item.CustomerWishList is not null)
+                    foreach (var CustomerWishList in item.CustomerWishList)
                         _context.Attach(CustomerWishList);
 
                 var entity = _context.Items.Add(item);
@@ -68,12 +68,16 @@ namespace AspNetProjekt.Services
                 find.ItemName = item.ItemName;
                 find.ItemPrice = item.ItemPrice;
                 find.ItemDiscount = item.ItemDiscount;
-                find.ItemAvalibility = item.ItemAvalibility;
-                find.Categories = item.Categories;
+                find.ItemAvalibility = item.ItemAvalibility;        
+                //if (item.Categories is not null)
+                //    foreach (var itemCategory in item.Categories)
+                //        _context.Attach(itemCategory);
+                //find.Categories = item.Categories;
                 find.CustomerShoppingCart_Item = item.CustomerShoppingCart_Item;
                 find.Transaction_Items = item.Transaction_Items;
                 find.ItemLikes = item.ItemLikes;
-                find.CustomerWishLists = item.CustomerWishLists;
+                find.CustomerWishList = item.CustomerWishList;
+                find.ItemImageName = item.ItemImageName;
                 _context.SaveChanges();
                 return true;
             }
@@ -99,21 +103,17 @@ namespace AspNetProjekt.Services
 
         public int? GetLikes(Guid? id)
         {
-            return (from i in _context.Items
-                    join il in _context.ItemsLikes on i.ItemId equals il.ItemId
-                    select il).Count();
+            throw new NotImplementedException();
         }
 
         public int? GetWishes(Guid? id)
         {
-            return (from i in _context.Items
-                    join wl in _context.CustomersWishLists on i.ItemId equals wl.ItemId
-                    select wl).Count();
+            throw new NotImplementedException();
         }
 
         public bool Like(Item item)
         {
-            
+            throw new NotImplementedException();
         }
 
         public bool Wish(Item item)

@@ -15,7 +15,7 @@ namespace AspNetProjekt.Models
         public ISet<Category>? Categories { get; set; }
         public List<CustomerShoppingCart_Item>? CustomerShoppingCart_Item { get; set; }
         public List<Transaction_Item>? Transaction_Items { get; set; }
-        public List<ItemLikes>? ItemLikes { get; set; }
-        public List<CustomerWishList>? CustomerWishLists { get; set; }
+        public ISet<Customer>? ItemLikes { get; set; }
+        public ISet<Customer>? CustomerWishList { get; set; }
     }
 }
