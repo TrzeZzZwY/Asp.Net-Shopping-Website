@@ -38,7 +38,13 @@ namespace AspNetProjekt.Services
 
         public Transaction? FindBy(Guid? id)
         {
-            return _context.Transactions.Find(id);
+            Transaction? transaction = _context.Transactions.Find(id);
+            _context.Entry(transaction).Collection(e => e.transaction_Items).Load();
+            foreach (var item in transaction.transaction_Items)
+            {
+                _context.Entry(item).Reference(e => e.Item).Load();
+            }
+            return transaction;
         }
 
         public ICollection<Transaction> FindPage(int page, int size)

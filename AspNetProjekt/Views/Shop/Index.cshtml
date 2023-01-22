@@ -68,9 +68,12 @@
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
                         <p class="card-text">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
                         <p class="card-text">iloś w magazynie: @Html.DisplayFor(modelItem => item.ItemAvalibility)</p>
-                        <a href="#" class="btn btn-primary d-inline-block ">like</a>
-                        <a href="#" class="btn btn-secondary d-inline-block">Lista życzeń</a>
-                        <a onclick="AddItemToCart('@item.ItemId')" class="btn btn-danger d-inline-block">Koszyk</a>
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireUser")).Succeeded)
+                        {
+                            <a href="#" class="btn btn-primary d-inline-block ">like</a>
+                            <a href="#" class="btn btn-secondary d-inline-block">Lista życzeń</a>
+                            <a onclick="AddItemToCart('@item.ItemId')" class="btn btn-danger d-inline-block">Koszyk</a>
+                        }
                     </div>
                 </div>
             </div>

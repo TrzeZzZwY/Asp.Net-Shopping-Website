@@ -65,7 +65,7 @@ namespace AspNetProjekt.Controllers
 
             var response = _itemService.Save(item);
 
-            return Index();
+            return RedirectToAction("Index");
         }
         public IActionResult CreateCategory()
         {

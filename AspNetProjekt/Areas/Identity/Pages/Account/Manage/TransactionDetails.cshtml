@@ -1,0 +1,43 @@
+﻿@page
+@model AspNetProjekt.Areas.Identity.Pages.Account.Manage.TransactionDetailsModel
+@{
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Zdjęcie
+            </th>
+            <th>
+                Nazwa
+            </th>
+            <th>
+                Cena
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.transaction.transaction_Items)
+        {
+            <tr>
+
+                <td>
+                    @if (String.IsNullOrEmpty(item.Item.ItemImageName))
+                    {
+                        <img width="150" height="150" src="~/image/noimage.jpg" asp-append-version="true" />
+                    }
+                    else
+                    {
+                        <img width="150" height="150" src="@("~/image/"+item.Item.ItemImageName)" asp-append-version="true" />
+                    }
+                </td>
+                <td>
+                    @item.Item.ItemName
+                </td>
+                <td>
+                    @item.ItemPrice
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

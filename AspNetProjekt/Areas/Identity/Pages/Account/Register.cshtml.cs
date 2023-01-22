@@ -32,9 +32,11 @@ namespace AspNetProjekt.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<MyUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<MyUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IdentityContext identityContext,
             IUserStore<MyUser> userStore,
             SignInManager<MyUser> signInManager,
@@ -42,6 +44,7 @@ namespace AspNetProjekt.Areas.Identity.Pages.Account
             IEmailSender emailSender)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _userStore = userStore;
             _context = identityContext;
             _emailStore = GetEmailStore();
@@ -132,6 +135,11 @@ namespace AspNetProjekt.Areas.Identity.Pages.Account
                         CustomerId = Guid.Parse(userId),
                         IdentityUserId = userId,
                     };
+                    if (!_roleManager.RoleExistsAsync("User").Result)
+                    {
+                        _roleManager.CreateAsync(new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "User", NormalizedName = "USER" });
+                    }
+                    _userManager.AddToRoleAsync(user, "User");
                     _context.Customers.Add(customer);
                     _context.SaveChanges();
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

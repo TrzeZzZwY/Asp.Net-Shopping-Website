@@ -32,7 +32,7 @@
                         @item.transaction_Items.Sum(e => e.ItemPrice)
                     </td>
                     <td>
-                        <a class="btn btn-primary">szczegóły</a>
+                        <a asp-route-id="@item.TransactionId.ToString()" asp-page="TransactionDetails" class="btn btn-primary">szczegóły</a>
                     </td>
                 </tr>
             }
