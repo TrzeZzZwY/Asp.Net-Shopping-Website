@@ -17,24 +17,16 @@ namespace AspNetProjekt.Services
             {
                 if (item is null)
                     return false;
-                CustomerShoppingCart shoppingCart = _context.CustomersShoppingCarts.Find(UserId);
-                if (shoppingCart is null)
-                {
-                    shoppingCart = new CustomerShoppingCart()
-                    {
-                        CustomerId = UserId,
-                        CustomerShoppingCart_Items = new List<CustomerShoppingCart_Item>()
-                    };
-                    shoppingCart.CustomerShoppingCart_Items.Add(new CustomerShoppingCart_Item() { CustomerShoppingCart = shoppingCart, Item = item });
-                    Save(shoppingCart);
-                }
-                else
-                {
-                    _context.Entry(shoppingCart).Collection(e => e.CustomerShoppingCart_Items).Load();
-                    shoppingCart.CustomerShoppingCart_Items.Add(new CustomerShoppingCart_Item() { CustomerShoppingCart = shoppingCart, Item = item });
-                    _context.SaveChanges();
-                }
+                if (item.ItemAvalibility == 0)
+                    return false;
 
+                CustomerShoppingCart shoppingCart = _context.CustomersShoppingCarts.Find(UserId);
+
+                if (shoppingCart is null)
+                    shoppingCart = Create(UserId);
+                _context.Entry(shoppingCart).Collection(e => e.CustomerShoppingCart_Items).Load();
+                shoppingCart.CustomerShoppingCart_Items.Add(new CustomerShoppingCart_Item() { CustomerShoppingCart = shoppingCart, Item = item });
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -75,7 +67,7 @@ namespace AspNetProjekt.Services
             var cart = FindBy(UserId);
             if (cart is null)
                 return new List<CustomerShoppingCart_Item>();
-            var list = _context.customerShoppingCart_Items.Where(e=> e.CustomerShoppingCart == cart).ToList();
+            var list = _context.customerShoppingCart_Items.Where(e => e.CustomerShoppingCart == cart).ToList();
             foreach (var item in list)
             {
                 _context.Entry(item).Reference(e => e.Item).Load();
@@ -164,6 +156,17 @@ namespace AspNetProjekt.Services
                 });
             }
             return shoppingCartItemDbo;
+        }
+
+        public CustomerShoppingCart Create(Guid UserId)
+        {
+            CustomerShoppingCart shoppingCart = new CustomerShoppingCart()
+            {
+                CustomerId = UserId,
+                CustomerShoppingCart_Items = new List<CustomerShoppingCart_Item>()
+            };
+            Save(shoppingCart);
+            return shoppingCart;
         }
     }
 }

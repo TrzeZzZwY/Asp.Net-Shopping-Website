@@ -15,6 +15,8 @@ namespace AspNetProjekt.Services
         public ICollection<Item> FindAll();
 
         public ICollection<Item> FindPage(int page, int size);
+        public bool Like(Item item);
+        public bool Wish(Item item);
 
         public int? GetLikes(Guid? id);
         public int? GetWishes(Guid? id);

@@ -11,11 +11,9 @@ namespace AspNetProjekt.Models
         public Guid CustomerShoppingCartsId { get; set; }
         public CustomerShoppingCart? CustomerShoppingCart { get; set; }
 
-        public Guid CustomerWishListId { get; set; }
-        public CustomerWishList? CustomerWishList { get; set; }
+        public ISet<CustomerWishList> CustomerWishList { get; set; }
 
-        public Guid ItemLikesId { get; set; }
-        public ItemLikes? ItemLikes { get; set; }
+        public ISet<ItemLikes> ItemLikes { get; set; }
         public ISet<Transaction> Transactions { get; set; }
     }
 }

@@ -111,6 +111,14 @@ namespace AspNetProjekt.Services
                     select wl).Count();
         }
 
+        public bool Like(Item item)
+        {
+            
+        }
 
+        public bool Wish(Item item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

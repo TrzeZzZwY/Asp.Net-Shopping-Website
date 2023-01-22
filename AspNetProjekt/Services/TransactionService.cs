@@ -66,6 +66,12 @@ namespace AspNetProjekt.Services
             foreach (var shoppingCart_Item in shoppingCart.CustomerShoppingCart_Items)
             {
                 _context.Entry(shoppingCart_Item).Reference(e => e.Item).Load();
+                if(shoppingCart_Item.Item.ItemAvalibility == 0)
+                {
+                    _context.Transactions.Remove(transaction);
+                    return null;
+                }
+                shoppingCart_Item.Item.ItemAvalibility--;
                 Transaction_Item transaction_Item = new Transaction_Item()
                 {
                     Transaction = transaction,

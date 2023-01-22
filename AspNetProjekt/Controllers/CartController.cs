@@ -48,8 +48,8 @@ namespace AspNetProjekt.Controllers
         {
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
             CustomerShoppingCart shoppingCart = _shoppingCartService.FindBy(userId);
-            _transactionService.Save(shoppingCart);
-            _shoppingCartService.DeleteAll(userId);
+            if (_transactionService.Save(shoppingCart) is not null)
+                _shoppingCartService.DeleteAll(userId);
         }
     }
 }
