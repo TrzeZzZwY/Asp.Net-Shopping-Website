@@ -27,7 +27,8 @@ namespace AspNetProjekt.Controllers
         {
             Item item = _itemService.FindBy(Guid.Parse(id));
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
-            _shoppingCartService.Add(item, userId);
+            if (_shoppingCartService.Add(item, userId))
+                TempData["AddedToCart"] = "aaaa";
         }
         [HttpPost]
         public void RemoveFromShoppingCart([FromBody] string id)
@@ -46,9 +47,9 @@ namespace AspNetProjekt.Controllers
         public void BuyAllInCart()
         {
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
-            CustomerShoppingCart shoppingCart= _shoppingCartService.FindBy(userId);
+            CustomerShoppingCart shoppingCart = _shoppingCartService.FindBy(userId);
             _transactionService.Save(shoppingCart);
             _shoppingCartService.DeleteAll(userId);
-        } 
+        }
     }
 }
