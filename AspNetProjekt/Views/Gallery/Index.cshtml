@@ -7,68 +7,15 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["Title"] = "Sklep";
-}
-
-@if (TempData["AddedToCart"] != null)
-{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    @if (((string)TempData["AddedToCart"]) == "Success")
-    {
-        <script type="text/javascript">
-                    toastr.options = {
-              "closeButton": false,
-              "debug": false,
-              "newestOnTop": false,
-              "progressBar": false,
-              "positionClass": "toast-bottom-right",
-              "preventDuplicates": false,
-              "onclick": null,
-              "showDuration": "300",
-              "hideDuration": "5000",
-              "timeOut": "3000",
-              "extendedTimeOut": "1000",
-              "showEasing": "swing",
-              "hideEasing": "linear",
-              "showMethod": "fadeIn",
-              "hideMethod": "fadeOut"
-            }
-                   toastr.info('Dodano do koszyka')
-        </script>
-    }
-        @if (((string)TempData["AddedToCart"]) == "Fail")
-    {
-        <script type="text/javascript">
-                    toastr.options = {
-              "closeButton": false,
-              "debug": false,
-              "newestOnTop": false,
-              "progressBar": false,
-              "positionClass": "toast-bottom-right",
-              "preventDuplicates": false,
-              "onclick": null,
-              "showDuration": "300",
-              "hideDuration": "5000",
-              "timeOut": "3000",
-              "extendedTimeOut": "1000",
-              "showEasing": "swing",
-              "hideEasing": "linear",
-              "showMethod": "fadeIn",
-              "hideMethod": "fadeOut"
-            }
-                   toastr.warning('Nie udało się dodać do koszyka')
-        </script>
-    }
 }
 <p>
     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
     {
-        <a class="btn btn-primary" asp-action="CreateItem">Dodaj nowy produkt</a>
-        <a class="btn btn-primary" asp-action="CreateCategory">Dodaj nową Kategorię</a>
+        <a class="btn btn-primary" asp-action="CreateItem" asp-controller="Shop">Dodaj nowy produkt</a>
+        <a class="btn btn-primary" asp-action="CreateCategory" asp-controller="Shop">Dodaj nową Kategorię</a>
     }
 </p>
-<h3>Sklep</h3>
+<h3>Galeria Produktów</h3>
 <div class="container">
     <div class="row row-cols-3 card-deck">
 
@@ -98,7 +45,10 @@
                         {
                             <a onclick="LikeItem('@item.ItemId')" class="btn btn-primary d-inline-block "><i class="bi bi-heart-fill"></i>(@item.ItemLikes.Count)</a>
                             <a onclick="WishItem('@item.ItemId')" class="btn btn-secondary d-inline-block">Lista życzeń</a>
-                            <a onclick="AddItemToCart('@item.ItemId')" name="@item.ItemId" class="btn btn-danger d-inline-block">Koszyk</a>
+                            if(item.ItemAvalibility > 0)
+                            {
+                                 <a href="../Shop/Index#@item.ItemId" class="btn btn-secondary d-inline-block">Strona w sklepie</a> 
+                            }
                         }
                     </div>
                 </div>
@@ -108,20 +58,6 @@
     </div>
 </div>
 <script>
-    function AddItemToCart(str) {
-      var request = new XMLHttpRequest();
-      request.onreadystatechange = function() {
-      };
-      var url = "/Cart/AddToShoppingCart";
-      request.open("POST", url, false);
-      request.setRequestHeader("Content-Type", "application/json");
-      request.onreadystatechange = function () {
-        if (request.readyState == 4 && request.status == 200) {
-            location.reload(true);
-        }
-      };
-    request.send(JSON.stringify(str));
-    }
     function LikeItem(str) {
       var request = new XMLHttpRequest();
       request.onreadystatechange = function() {

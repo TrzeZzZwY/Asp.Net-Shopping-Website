@@ -4,6 +4,57 @@
 *@
 @{
 }
+@if (TempData["RemovedFromCart"] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    @if (((string)TempData["RemovedFromCart"]) == "Success")
+    {
+        <script type="text/javascript">
+                    toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-bottom-right",
+              "preventDuplicates": false,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "5000",
+              "timeOut": "3000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+                   toastr.info('Usunięto z koszyka')
+        </script>
+    }
+        @if (((string)TempData["RemovedFromCart"]) == "Fail")
+    {
+        <script type="text/javascript">
+                    toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-bottom-right",
+              "preventDuplicates": false,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "5000",
+              "timeOut": "3000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+                   toastr.warning('Nie udało się usunąć z koszyka')
+        </script>
+    }
+}
 @if (@Model.Count() == 0)
 {
     <p>Nie masz jeszcze nic w swoim koszyku</p>

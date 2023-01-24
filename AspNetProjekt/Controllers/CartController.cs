@@ -28,13 +28,18 @@ namespace AspNetProjekt.Controllers
             Item item = _itemService.FindBy(Guid.Parse(id));
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
             if (_shoppingCartService.Add(item, userId))
-                TempData["AddedToCart"] = "aaaa";
+                TempData["AddedToCart"] = "Success";
+            else
+                TempData["AddedToCart"] = "Fail";
         }
         [HttpPost]
         public void RemoveFromShoppingCart([FromBody] string id)
         {
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
-            _shoppingCartService.Delete(Guid.Parse(id), userId);
+            if (_shoppingCartService.Delete(Guid.Parse(id), userId))
+                TempData["RemovedFromCart"] = "Success";
+            else
+                TempData["RemovedFromCart"] = "Fail";
         }
 
         public IActionResult MyCart()

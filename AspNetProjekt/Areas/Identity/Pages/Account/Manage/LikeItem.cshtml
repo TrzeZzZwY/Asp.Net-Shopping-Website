@@ -1,0 +1,43 @@
+﻿@page
+@model AspNetProjekt.Areas.Identity.Pages.Account.Manage.LikeItemModel
+@{
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Zdjęcie
+            </th>
+            <th>
+                Nazwa
+            </th>
+            <th>
+                Cena
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.LikedItems)
+        {
+            <tr>
+
+                <td>
+                    @if (String.IsNullOrEmpty(item.ItemImageName))
+                    {
+                        <img width="150" height="150" src="~/image/noimage.jpg" asp-append-version="true" />
+                    }
+                    else
+                    {
+                        <img width="150" height="150" src="@("~/image/"+item.ItemImageName)" asp-append-version="true" />
+                    }
+                </td>
+                <td>
+                    @item.ItemName
+                </td>
+                <td>
+                    @item.ItemPrice
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

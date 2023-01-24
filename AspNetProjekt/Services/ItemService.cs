@@ -68,7 +68,7 @@ namespace AspNetProjekt.Services
                 find.ItemName = item.ItemName;
                 find.ItemPrice = item.ItemPrice;
                 find.ItemDiscount = item.ItemDiscount;
-                find.ItemAvalibility = item.ItemAvalibility;        
+                find.ItemAvalibility = item.ItemAvalibility;
                 //if (item.Categories is not null)
                 //    foreach (var itemCategory in item.Categories)
                 //        _context.Attach(itemCategory);
@@ -88,7 +88,13 @@ namespace AspNetProjekt.Services
         }
         public ICollection<Item> FindAll()
         {
-            return _context.Items.ToList();
+            List<Item> items = _context.Items.ToList();
+            foreach (var item in items)
+            {
+                _context.Entry(item).Collection(e => e.ItemLikes).Load();
+                _context.Entry(item).Collection(e => e.CustomerWishList).Load();
+            }
+            return items;
         }
 
         public Item? FindBy(Guid? id)
@@ -101,24 +107,52 @@ namespace AspNetProjekt.Services
             throw new NotImplementedException();
         }
 
-        public int? GetLikes(Guid? id)
+        public ICollection<Item> GetLikes(Guid id)
         {
-            throw new NotImplementedException();
+            Customer? customer = _context.Customers.Find(id);
+            if (customer == null)
+                return new List<Item>();
+            _context.Entry(customer).Collection(e => e.ItemLikes).Load();
+            return customer.ItemLikes;
         }
 
-        public int? GetWishes(Guid? id)
+        public ICollection<Item> GetWishes(Guid id)
         {
-            throw new NotImplementedException();
+            Customer? customer = _context.Customers.Find(id);
+            if (customer == null)
+                return new List<Item>();
+            _context.Entry(customer).Collection(e => e.CustomerWishList).Load();
+            return customer.CustomerWishList;
         }
 
-        public bool Like(Item item)
+        public bool Like(Guid itemId, Guid userId)
         {
-            throw new NotImplementedException();
+            Item? item = FindBy(itemId);
+            Customer? customer = _context.Customers.Find(userId);
+            if (item == null || customer == null)
+                return false;
+            _context.Entry(item).Collection(e => e.ItemLikes).Load();
+            if (item.ItemLikes.Contains(customer))
+                item.ItemLikes.Remove(customer);
+            else
+                item.ItemLikes.Add(customer);
+            _context.SaveChanges();
+            return true;
         }
 
-        public bool Wish(Item item)
+        public bool Wish(Guid itemId, Guid userId)
         {
-            throw new NotImplementedException();
+            Item? item = FindBy(itemId);
+            Customer? customer = _context.Customers.Find(userId);
+            if (item == null || customer == null)
+                return false;
+            _context.Entry(item).Collection(e => e.CustomerWishList).Load();
+            if (item.CustomerWishList.Contains(customer))
+                item.CustomerWishList.Remove(customer);
+            else
+                item.CustomerWishList.Add(customer);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

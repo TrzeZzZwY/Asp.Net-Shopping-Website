@@ -5,7 +5,7 @@ namespace AspNetProjekt.Models
     public class Item
     {
         [Key]
-        public Guid ItemId { get; set; }
+        public Guid ItemId { get; set; } 
         public string ItemName { get; set; }
         public decimal ItemPrice { get; set; }
         public int ItemDiscount { get; set; }

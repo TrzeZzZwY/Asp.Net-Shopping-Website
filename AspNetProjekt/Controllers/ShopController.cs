@@ -30,9 +30,10 @@ namespace AspNetProjekt.Controllers
 
         public IActionResult Index()
         {
-            return View("Index", _itemService.FindAll());
+            return View("Index", _itemService.FindAll().Where(e => e.ItemAvalibility > 0));
         }
         [Authorize(Roles = "Admin")]
+        #region createItem
         public IActionResult CreateItem(ItemDto? itemDto)
         {
             if (itemDto is null)
@@ -68,26 +69,8 @@ namespace AspNetProjekt.Controllers
 
             return RedirectToAction("Index");
         }
-        [Authorize(Roles = "Admin")]
-        public IActionResult CreateCategory()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public IActionResult CreateCategory([FromForm] CategoryDto? categoryDto)
-        {
-            if (categoryDto is null)
-                return View();
-
-            if (!ModelState.IsValid)
-                return View(categoryDto);
-
-            Category category = categoryDto.ConvertTo();
-            var response = _categoryService.Save(category);
-            return Index();
-        }
+        #endregion
+        #region editItem
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult EditItem(Guid? id)
@@ -111,7 +94,48 @@ namespace AspNetProjekt.Controllers
             }
             item.ItemId = Guid.Parse(itemDto.ItemId);
             _itemService.Update(item);
-            return Index();
+            return RedirectToAction("Index");
+        }
+        #endregion
+        #region createCategory
+        [Authorize(Roles = "Admin")]
+        public IActionResult CreateCategory()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult CreateCategory([FromForm] CategoryDto? categoryDto)
+        {
+            if (categoryDto is null)
+                return View();
+
+            if (!ModelState.IsValid)
+                return View(categoryDto);
+
+            Category category = categoryDto.ConvertTo();
+            var response = _categoryService.Save(category);
+            return RedirectToAction("Index");
+        }
+        #endregion
+        [HttpPost]
+        public void LikeItem([FromBody] string id)
+        {
+            if (id == null)
+                return;
+            Guid itemId = Guid.Parse(id);
+            Guid userId = Guid.Parse(_userManager.GetUserId(User));
+            _itemService.Like(itemId,userId);
+        }
+        [HttpPost]
+        public void WishItem([FromBody] string id)
+        {
+            if (id == null)
+                return;
+            Guid itemId = Guid.Parse(id);
+            Guid userId = Guid.Parse(_userManager.GetUserId(User));
+            _itemService.Wish(itemId, userId);
         }
         [Authorize(Roles = "Admin")]
         private string SaveImage(ItemDto itemDto)
@@ -146,7 +170,6 @@ namespace AspNetProjekt.Controllers
             }
             
         }
-
 
         [HttpPost]
         public JsonResult AjaxMethod([FromBody] string test)
