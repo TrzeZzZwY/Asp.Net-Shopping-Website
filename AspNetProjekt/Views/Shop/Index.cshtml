@@ -10,57 +10,7 @@
     ViewData["Title"] = "Sklep";
 }
 
-@if (TempData["AddedToCart"] != null)
-{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    @if (((string)TempData["AddedToCart"]) == "Success")
-    {
-        <script type="text/javascript">
-                    toastr.options = {
-              "closeButton": false,
-              "debug": false,
-              "newestOnTop": false,
-              "progressBar": false,
-              "positionClass": "toast-bottom-right",
-              "preventDuplicates": false,
-              "onclick": null,
-              "showDuration": "300",
-              "hideDuration": "5000",
-              "timeOut": "3000",
-              "extendedTimeOut": "1000",
-              "showEasing": "swing",
-              "hideEasing": "linear",
-              "showMethod": "fadeIn",
-              "hideMethod": "fadeOut"
-            }
-                   toastr.info('Dodano do koszyka')
-        </script>
-    }
-        @if (((string)TempData["AddedToCart"]) == "Fail")
-    {
-        <script type="text/javascript">
-                    toastr.options = {
-              "closeButton": false,
-              "debug": false,
-              "newestOnTop": false,
-              "progressBar": false,
-              "positionClass": "toast-bottom-right",
-              "preventDuplicates": false,
-              "onclick": null,
-              "showDuration": "300",
-              "hideDuration": "5000",
-              "timeOut": "3000",
-              "extendedTimeOut": "1000",
-              "showEasing": "swing",
-              "hideEasing": "linear",
-              "showMethod": "fadeIn",
-              "hideMethod": "fadeOut"
-            }
-                   toastr.warning('Nie udało się dodać do koszyka')
-        </script>
-    }
-}
+
 <p>
     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
     {
@@ -91,7 +41,19 @@
                     }
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemName)</h5>
-                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
+                        @if (item.ItemDiscount == 0)
+                        {
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
+                        }
+                        else
+                        {
+                            <span style='color:red;text-decoration:line-through'>
+                                <span style='color:black'>
+                                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
+                                </span>
+                            </span>
+                           <h5 class="card-title">@(Math.Round(item.ItemPrice - item.ItemPrice * item.ItemDiscount / 100,2)) zł</h5>
+                        }
                         <p class="card-text">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
                         <p class="card-text">iloś w magazynie: @Html.DisplayFor(modelItem => item.ItemAvalibility)</p>
                         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireUser")).Succeeded)
@@ -151,3 +113,54 @@
     request.send(JSON.stringify(str));
     }
 </script>
+@if (TempData["AddedToCart"] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    @if (((string)TempData["AddedToCart"]) == "Success")
+    {
+        <script type="text/javascript">
+                    toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-bottom-right",
+              "preventDuplicates": false,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "5000",
+              "timeOut": "3000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+                   toastr.info('Dodano do koszyka')
+        </script>
+    }
+    @if (((string)TempData["AddedToCart"]) == "Fail")
+    {
+        <script type="text/javascript">
+                    toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-bottom-right",
+              "preventDuplicates": false,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "5000",
+              "timeOut": "3000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+                   toastr.warning('Nie udało się dodać do koszyka')
+        </script>
+    }
+}

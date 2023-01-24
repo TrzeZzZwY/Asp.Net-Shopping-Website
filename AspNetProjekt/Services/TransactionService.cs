@@ -28,7 +28,7 @@ namespace AspNetProjekt.Services
 
         public ICollection<Transaction> FindAllFor(Guid UserId)
         {
-            List<Transaction> transactions = _context.Transactions.Where(e => e.CustomerId == UserId).ToList();
+            List<Transaction> transactions = _context.Transactions.Where(e => e.CustomerId == UserId).OrderByDescending(e => e.TransactionDate).ToList();
             foreach (var transaction in transactions)
             {
                 _context.Entry(transaction).Collection(e => e.transaction_Items).Load();
@@ -76,7 +76,7 @@ namespace AspNetProjekt.Services
                 {
                     Transaction = transaction,
                     Item = shoppingCart_Item.Item,
-                    ItemPrice = shoppingCart_Item.Item.ItemPrice * (1 - (shoppingCart_Item.Item.ItemDiscount / 100)),
+                    ItemPrice = Math.Round(shoppingCart_Item.Item.ItemPrice - (shoppingCart_Item.Item.ItemPrice * shoppingCart_Item.Item.ItemDiscount / 100),2),
                 };
                 _context.Transaction_Items.Add(transaction_Item);
                 transaction.transaction_Items.Add(transaction_Item);

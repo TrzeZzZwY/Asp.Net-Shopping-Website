@@ -20,23 +20,26 @@ else
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateItemForm" method="post" asp-controller="shop" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="ItemId" />
             <div class="form-group">
                 <label asp-for="ItemName" class="control-label"></label>
                 <input asp-for="ItemName" class="form-control" />
+                <span asp-validation-for="ItemName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ItemPrice" class="control-label"></label>
                 <input asp-for="ItemPrice" class="form-control" />
+                <span asp-validation-for="ItemPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ItemDiscout" class="control-label"></label>
                 <input asp-for="ItemDiscout" class="form-control" />
+                <span asp-validation-for="ItemDiscout" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ItemAvalibility" class="control-label"></label>
                 <input asp-for="ItemAvalibility" class="form-control" />
+                <span asp-validation-for="ItemAvalibility" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ItemDescription" class="control-label"></label>

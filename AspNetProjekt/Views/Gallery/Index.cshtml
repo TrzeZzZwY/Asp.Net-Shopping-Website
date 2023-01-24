@@ -25,7 +25,7 @@
                 <div class="card mb-4" style="width: 18rem;">
                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                     {
-                        <a asp-action="EditItem" asp-route-id="@item.ItemId" style="position:absolute" class="btn btn-danger d-inline-block m-1">edit</a>
+                        <a asp-action="EditItem" asp-controller="Shop" asp-route-id="@item.ItemId" style="position:absolute" class="btn btn-danger d-inline-block m-1">edit</a>
 
                     }
                     @if (String.IsNullOrEmpty(item.ItemImageName))

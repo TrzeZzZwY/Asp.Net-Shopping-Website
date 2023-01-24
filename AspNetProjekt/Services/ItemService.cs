@@ -69,10 +69,11 @@ namespace AspNetProjekt.Services
                 find.ItemPrice = item.ItemPrice;
                 find.ItemDiscount = item.ItemDiscount;
                 find.ItemAvalibility = item.ItemAvalibility;
-                //if (item.Categories is not null)
-                //    foreach (var itemCategory in item.Categories)
-                //        _context.Attach(itemCategory);
-                //find.Categories = item.Categories;
+                _context.Entry(find).Collection(e => e.Categories).Load();
+                find.Categories = new HashSet<Category>();
+                foreach (var category in item.Categories)
+                    find.Categories.Add(_context.Categories.Find(category.CategoryId));
+                
                 find.CustomerShoppingCart_Item = item.CustomerShoppingCart_Item;
                 find.Transaction_Items = item.Transaction_Items;
                 find.ItemLikes = item.ItemLikes;
@@ -81,7 +82,7 @@ namespace AspNetProjekt.Services
                 _context.SaveChanges();
                 return true;
             }
-            catch
+             catch
             {
                 return false;
             }
