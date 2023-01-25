@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Web;
 
 namespace AspNetProjekt.Controllers
 {
@@ -30,19 +31,29 @@ namespace AspNetProjekt.Controllers
             _myAppSettings = MyAppSettings;
         }
 
-        public IActionResult Index()
+
+        public IActionResult Index([FromQuery] string[]? category)
         {
+            if(category is not null && category.Length != 0)
+            {
+                HashSet<string> categories = new HashSet<string>();
+                var allCategories = _categoryService.FindAll().Select(e => e.CategoryName).ToList();
+                foreach (var item in category)
+                    if (allCategories.Contains(item))
+                        _myAppSettings.filteringCategories.Add(item);
+            }
+
             HashSet<Item> items = _itemService.FindAll().Where(e => e.ItemAvalibility > 0).ToHashSet();
             HashSet<Item> FileredItems = new HashSet<Item>();
             if (_myAppSettings.filteringCategories is null || _myAppSettings.filteringCategories.Count == 0)
                 return View("Index", items);
+
             foreach (var item in items)
                 foreach (var filteringCategory in _myAppSettings.filteringCategories)
-                    foreach (var category in item.Categories)
-                        if (category.CategoryName == filteringCategory)
+                    foreach (var cat in item.Categories)
+                        if (cat.CategoryName == filteringCategory)
                             FileredItems.Add(item);
 
-                    
             return View("Index", FileredItems);
 
         }
@@ -90,7 +101,7 @@ namespace AspNetProjekt.Controllers
         public IActionResult EditItem(Guid? id)
         {
             if (id is null)
-                return Index();
+                return RedirectToAction("Index");
 
             Item? item = _itemService.FindBy(id);
             if (item is null)
@@ -154,17 +165,18 @@ namespace AspNetProjekt.Controllers
             _itemService.Wish(itemId, userId);
         }
         [HttpPost]
-        public void AddFilterCategory([FromBody] string categoryName)
+        public IActionResult AddFilterCategory([FromBody] string categoryName)
         {
             List<Category> categories = _categoryService.FindAll().ToList();
             if (!categories.Any(e => e.CategoryName == categoryName))
-                return;
+                return Index(_myAppSettings.filteringCategories.ToArray());
             if (_myAppSettings.filteringCategories is null)
                 _myAppSettings.filteringCategories = new HashSet<string>();
 
             if (!_myAppSettings.filteringCategories.Add(categoryName))
                 _myAppSettings.filteringCategories.Remove(categoryName);
-            return;
+
+            return RedirectToAction("Index", _myAppSettings.filteringCategories.ToArray());
 
         }
 

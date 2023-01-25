@@ -53,6 +53,8 @@ namespace AspNetProjekt.Services
             if (find is null)
                 return false;
 
+            if (_context.Transaction_Items.Any(e => e.ItemId == id) || _context.customerShoppingCart_Items.Any(e => e.ItemId == id))
+                return false;
             _context.Items.Remove(find);
             _context.SaveChanges();
             return true;

@@ -6,5 +6,6 @@ namespace AspNetProjekt.Services
     public class MyAppSettings : IMyAppSettings
     {
         public HashSet<string> filteringCategories { get; set ; }
+        public HashSet<string> galleryFilteringCategories { get; set ; }
     }
 }

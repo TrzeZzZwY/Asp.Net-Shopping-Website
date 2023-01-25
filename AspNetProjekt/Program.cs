@@ -4,6 +4,7 @@ using AspNetProjekt.Areas.Identity.Data;
 using AspNetProjekt.Services;
 using AspNetProjekt.Models;
 using AspNetProjekt.Services.interfaces;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
@@ -22,6 +23,11 @@ builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddSingleton<IMyAppSettings, MyAppSettings>();
 builder.Services.AddRazorPages();
+builder.Services.AddMvc().AddJsonOptions(
+ options => options.JsonSerializerOptions.ReferenceHandler =
+ReferenceHandler.Preserve
+);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

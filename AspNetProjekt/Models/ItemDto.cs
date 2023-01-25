@@ -21,6 +21,7 @@ namespace AspNetProjekt.Models
             ItemDiscout = item.ItemDiscount;
             ItemName = item.ItemName;
             ItemPrice = item.ItemPrice;
+            Categories = item.Categories.Select(e => e.CategoryId.ToString()).ToList();
         }
         [HiddenInput]
         public string? ItemId { get; set; }

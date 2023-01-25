@@ -1,7 +1,9 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using AspNetProjekt.Services.interfaces
+@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @model IEnumerable<AspNetProjekt.Models.Item>
+@inject IMyAppSettings MyAppSettings
 @inject UserManager<MyUser> UserManager
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,6 +18,15 @@
     }
 </p>
 <h3>Galeria Produktów</h3>
+@if(!(MyAppSettings.galleryFilteringCategories is null || MyAppSettings.galleryFilteringCategories.Count == 0))
+{
+    <p>
+    @foreach(var cat in MyAppSettings.galleryFilteringCategories)
+    {
+      <span onclick="AddFilterCategory('@cat')">#@cat </span>  
+    }
+    </p>
+}
 <div class="container">
     <div class="row row-cols-3 card-deck">
 
@@ -38,7 +49,19 @@
                     }
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemName)</h5>
-                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
+                          @if (item.ItemDiscount == 0)
+                        {
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
+                        }
+                        else
+                        {
+                            <span style='color:red;text-decoration:line-through'>
+                                <span style='color:black'>
+                                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
+                                </span>
+                            </span>
+                            <h5 class="card-title">@(Math.Round(item.ItemPrice - item.ItemPrice * item.ItemDiscount / 100,2)) zł</h5>
+                        }
                         <p class="card-text">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
                         <p class="card-text">iloś w magazynie: @Html.DisplayFor(modelItem => item.ItemAvalibility)</p>
                         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireUser")).Succeeded)
@@ -50,6 +73,12 @@
                                  <a href="../Shop/Index#@item.ItemId" class="btn btn-secondary d-inline-block">Strona w sklepie</a> 
                             }
                         }
+                         <footer class="footer">
+                            @foreach (var category in item.Categories)
+                            {
+                                <a onclick="AddFilterCategory('@category.CategoryName')">#@category.CategoryName</a>
+                            }
+                        </footer>
                     </div>
                 </div>
             </div>
@@ -58,6 +87,20 @@
     </div>
 </div>
 <script>
+    function AddFilterCategory(str) {
+      var request = new XMLHttpRequest();
+      request.onreadystatechange = function() {
+      };
+      var url = "/Gallery/AddFilterCategory";
+      request.open("POST", url, false);
+      request.setRequestHeader("Content-Type", "application/json");
+      request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            location.reload(true);
+        }
+      };
+    request.send(JSON.stringify(str));
+    }
     function LikeItem(str) {
       var request = new XMLHttpRequest();
       request.onreadystatechange = function() {
