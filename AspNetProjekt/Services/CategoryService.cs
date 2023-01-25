@@ -6,7 +6,6 @@ namespace AspNetProjekt.Services
     public class CategoryService : ICategoryService
     {
         private IdentityContext _context;
-
         public CategoryService(IdentityContext identityContext)
         {
             _context = identityContext;

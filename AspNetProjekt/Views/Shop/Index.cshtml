@@ -1,6 +1,8 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using AspNetProjekt.Services.interfaces
+@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
+@inject IMyAppSettings MyAppSettings
 @model IEnumerable<AspNetProjekt.Models.Item>
 @inject UserManager<MyUser> UserManager
 @*
@@ -19,6 +21,15 @@
     }
 </p>
 <h3>Sklep</h3>
+@if(!(MyAppSettings.filteringCategories is null || MyAppSettings.filteringCategories.Count == 0))
+{
+    <p>
+    @foreach(var cat in MyAppSettings.filteringCategories)
+    {
+      <span onclick="AddFilterCategory('@cat')">#@cat </span>  
+    }
+    </p>
+}
 <div class="container">
     <div class="row row-cols-3 card-deck">
 
@@ -52,7 +63,7 @@
                                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
                                 </span>
                             </span>
-                           <h5 class="card-title">@(Math.Round(item.ItemPrice - item.ItemPrice * item.ItemDiscount / 100,2)) zł</h5>
+                            <h5 class="card-title">@(Math.Round(item.ItemPrice - item.ItemPrice * item.ItemDiscount / 100,2)) zł</h5>
                         }
                         <p class="card-text">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
                         <p class="card-text">iloś w magazynie: @Html.DisplayFor(modelItem => item.ItemAvalibility)</p>
@@ -62,6 +73,12 @@
                             <a onclick="WishItem('@item.ItemId')" class="btn btn-secondary d-inline-block">Lista życzeń</a>
                             <a onclick="AddItemToCart('@item.ItemId')" name="@item.ItemId" class="btn btn-danger d-inline-block">Koszyk</a>
                         }
+                        <footer class="footer">
+                            @foreach (var category in item.Categories)
+                            {
+                                <a onclick="AddFilterCategory('@category.CategoryName')">#@category.CategoryName</a>
+                            }
+                        </footer>
                     </div>
                 </div>
             </div>
@@ -70,6 +87,21 @@
     </div>
 </div>
 <script>
+     function AddFilterCategory(str) {
+      var request = new XMLHttpRequest();
+      request.onreadystatechange = function() {
+      };
+      var url = "/Shop/AddFilterCategory";
+      request.open("POST", url, false);
+      request.setRequestHeader("Content-Type", "application/json");
+      request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            location.reload(true);
+        }
+      };
+    request.send(JSON.stringify(str));
+    }
+
     function AddItemToCart(str) {
       var request = new XMLHttpRequest();
       request.onreadystatechange = function() {

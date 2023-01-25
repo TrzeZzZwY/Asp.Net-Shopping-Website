@@ -6,7 +6,6 @@ namespace AspNetProjekt.Services
     public class ItemService : IItemService
     {
         private IdentityContext _context;
-
         public ItemService(IdentityContext identityContext)
         {
             _context = identityContext;
@@ -94,13 +93,22 @@ namespace AspNetProjekt.Services
             {
                 _context.Entry(item).Collection(e => e.ItemLikes).Load();
                 _context.Entry(item).Collection(e => e.CustomerWishList).Load();
+                _context.Entry(item).Collection(e => e.Categories).Load();
             }
             return items;
         }
 
         public Item? FindBy(Guid? id)
         {
-            return id is null ? null : _context.Items.Find(id);
+            if (id is null)
+                return null;
+            Item? item = _context.Items.Find(id);
+            if (item is null)
+                return null;
+            _context.Entry(item).Collection(e => e.ItemLikes).Load();
+            _context.Entry(item).Collection(e => e.CustomerWishList).Load();
+            _context.Entry(item).Collection(e => e.Categories).Load();
+            return item;
         }
 
         public ICollection<Item> FindPage(int page, int size)

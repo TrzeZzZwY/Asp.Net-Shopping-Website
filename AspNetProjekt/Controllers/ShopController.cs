@@ -1,5 +1,6 @@
 ﻿using AspNetProjekt.Models;
 using AspNetProjekt.Services;
+using AspNetProjekt.Services.interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,10 @@ namespace AspNetProjekt.Controllers
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly UserManager<MyUser> _userManager;
         private readonly SignInManager<MyUser> _signInManager;
-
+        private readonly IMyAppSettings _myAppSettings;
         public ShopController(IItemService itemService, ICategoryService categoryService,
             IShoppingCartService shoppingCartService, IWebHostEnvironment hostEnvironment,
-            UserManager<MyUser> userManager, SignInManager<MyUser> signInManager)
+            UserManager<MyUser> userManager, SignInManager<MyUser> signInManager, IMyAppSettings MyAppSettings)
         {
             _itemService = itemService;
             _categoryService = categoryService;
@@ -26,11 +27,24 @@ namespace AspNetProjekt.Controllers
             _hostEnvironment = hostEnvironment;
             _userManager = userManager;
             _signInManager = signInManager;
+            _myAppSettings = MyAppSettings;
         }
 
         public IActionResult Index()
         {
-            return View("Index", _itemService.FindAll().Where(e => e.ItemAvalibility > 0));
+            HashSet<Item> items = _itemService.FindAll().Where(e => e.ItemAvalibility > 0).ToHashSet();
+            HashSet<Item> FileredItems = new HashSet<Item>();
+            if (_myAppSettings.filteringCategories is null || _myAppSettings.filteringCategories.Count == 0)
+                return View("Index", items);
+            foreach (var item in items)
+                foreach (var filteringCategory in _myAppSettings.filteringCategories)
+                    foreach (var category in item.Categories)
+                        if (category.CategoryName == filteringCategory)
+                            FileredItems.Add(item);
+
+                    
+            return View("Index", FileredItems);
+
         }
         [Authorize(Roles = "Admin")]
         #region createItem
@@ -41,10 +55,10 @@ namespace AspNetProjekt.Controllers
 
             var categories = _categoryService.FindAll().ToList();
             itemDto.categoriesList = new List<SelectListItem>();
+
             foreach (var category in categories)
-            {
                 itemDto.categoriesList.Add(new SelectListItem(category.CategoryName, category.CategoryId.ToString()));
-            }
+
 
             return View("CreateItem", itemDto);
         }
@@ -77,9 +91,11 @@ namespace AspNetProjekt.Controllers
         {
             if (id is null)
                 return Index();
+
             Item? item = _itemService.FindBy(id);
             if (item is null)
                 return NotFound();
+
             ItemDto itemDto = new ItemDto(item);
             return CreateItem(itemDto);
         }
@@ -126,7 +142,7 @@ namespace AspNetProjekt.Controllers
                 return;
             Guid itemId = Guid.Parse(id);
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
-            _itemService.Like(itemId,userId);
+            _itemService.Like(itemId, userId);
         }
         [HttpPost]
         public void WishItem([FromBody] string id)
@@ -137,6 +153,21 @@ namespace AspNetProjekt.Controllers
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
             _itemService.Wish(itemId, userId);
         }
+        [HttpPost]
+        public void AddFilterCategory([FromBody] string categoryName)
+        {
+            List<Category> categories = _categoryService.FindAll().ToList();
+            if (!categories.Any(e => e.CategoryName == categoryName))
+                return;
+            if (_myAppSettings.filteringCategories is null)
+                _myAppSettings.filteringCategories = new HashSet<string>();
+
+            if (!_myAppSettings.filteringCategories.Add(categoryName))
+                _myAppSettings.filteringCategories.Remove(categoryName);
+            return;
+
+        }
+
         [Authorize(Roles = "Admin")]
         private string SaveImage(ItemDto itemDto)
         {
@@ -164,11 +195,11 @@ namespace AspNetProjekt.Controllers
                 System.IO.File.Delete(path);
             }
             catch
-            {   
+            {
 
                 return;
             }
-            
+
         }
 
         [HttpPost]
