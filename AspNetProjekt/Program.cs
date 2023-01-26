@@ -15,7 +15,7 @@ builder.Services.AddDbContext<IdentityContext>(options =>
 builder.Services.AddDefaultIdentity<MyUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityContext>();
-
+builder.Services.AddSession();
 builder.Services.AddSingleton<IClockProvider, DefaultClock>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -55,11 +55,11 @@ app.UseAuthentication(); ;
 
 app.UseAuthorization();
 
-
+app.UseSession();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Shop}/{action=Index}/{id?}");
 
 app.Run();
 

@@ -18,6 +18,8 @@ namespace AspNetProjekt.Controllers
         private readonly UserManager<MyUser> _userManager;
         private readonly SignInManager<MyUser> _signInManager;
         private readonly IMyAppSettings _myAppSettings;
+
+
         public ShopController(IItemService itemService, ICategoryService categoryService,
             IShoppingCartService shoppingCartService, IWebHostEnvironment hostEnvironment,
             UserManager<MyUser> userManager, SignInManager<MyUser> signInManager, IMyAppSettings MyAppSettings)
@@ -30,7 +32,6 @@ namespace AspNetProjekt.Controllers
             _signInManager = signInManager;
             _myAppSettings = MyAppSettings;
         }
-
 
         public IActionResult Index([FromQuery] string[]? category)
         {
