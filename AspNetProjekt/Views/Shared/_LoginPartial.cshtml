@@ -13,7 +13,7 @@
                         .Where(e => e.CustomerShoppingCart == _context.CustomersShoppingCarts
                               .Find(Guid.Parse(UserManager.GetUserId(User)))).ToList().Count;
         <li class="nav-item">
-            <a id="manage" class="nav-link text-dark btn btn-link btn-primary m-1"  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            <a id="manage" class="nav-link text-dark btn btn-link btn-primary m-1"  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Witaj @UserManager.GetUserName(User)!</a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark btn btn-link btn-primary m-1"  asp-controller="Cart" asp-action="MyCart"><i class="bi bi-cart-fill"></i>(@itemsCount)</a>
