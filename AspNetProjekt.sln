@@ -5,7 +5,12 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetProjekt", "AspNetProjekt\AspNetProjekt.csproj", "{182EAAF2-CE80-49AE-AA9C-6476958D93DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetProjectxTest", "AspNetProjectxTest\AspNetProjectxTest.csproj", "{D1A3A9B9-38CC-4A26-8881-AAA16C113DC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetProjectxTest", "AspNetProjectxTest\AspNetProjectxTest.csproj", "{D1A3A9B9-38CC-4A26-8881-AAA16C113DC5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{05B11FA8-DDEB-4F54-9AB9-25F23E2CBD9E}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
