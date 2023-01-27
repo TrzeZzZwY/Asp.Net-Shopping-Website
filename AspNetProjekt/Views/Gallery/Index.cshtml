@@ -1,10 +1,12 @@
-﻿@using AspNetProjekt.Services.interfaces
+﻿@using AspNetProjekt.Services
+@using AspNetProjekt.Services.interfaces
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @model IEnumerable<AspNetProjekt.Models.Item>
 @inject IMyAppSettings MyAppSettings
 @inject UserManager<MyUser> UserManager
+@inject ICategoryService categoryService
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -18,14 +20,17 @@
     }
 </p>
 <h3>Galeria Produktów</h3>
-@if(!(MyAppSettings.galleryFilteringCategories is null || MyAppSettings.galleryFilteringCategories.Count == 0))
+@if (categoryService.FindAllAsSelectList() is not null && categoryService.FindAllAsSelectList().Count > 0)
 {
-    <p>
-    @foreach(var cat in MyAppSettings.galleryFilteringCategories)
-    {
-      <span onclick="AddFilterCategory('@cat')">#@cat </span>  
-    }
-    </p>
+    var lita = categoryService.FindAllAsSelectList().ToList();
+    <form asp-action="index" method="get" asp-controller="gallery">
+        Kategoria: @Html.DropDownList("category",lita);
+
+        <input class="btn btn-secondary" type="submit" value="Szukaj" />
+    </form>
+    <form asp-action="index" method="get" asp-controller="shop">
+        <input class="btn btn-secondary" type="submit" value="usuń filtry" />
+    </form>
 }
 <div class="container">
     <div class="row row-cols-3 card-deck">
@@ -49,7 +54,7 @@
                     }
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemName)</h5>
-                          @if (item.ItemDiscount == 0)
+                        @if (item.ItemDiscount == 0)
                         {
                             <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemPrice) zł</h5>
                         }
@@ -68,15 +73,15 @@
                         {
                             <a onclick="LikeItem('@item.ItemId')" class="btn btn-primary d-inline-block "><i class="bi bi-heart-fill"></i>(@item.ItemLikes.Count)</a>
                             <a onclick="WishItem('@item.ItemId')" class="btn btn-secondary d-inline-block">Lista życzeń</a>
-                            if(item.ItemAvalibility > 0)
+                            if (item.ItemAvalibility > 0)
                             {
-                                 <a href="../Shop/Index#@item.ItemId" class="btn btn-info d-inline-block">Sklep</a> 
+                                <a href="../Shop/Index#@item.ItemId" class="btn btn-info d-inline-block">Sklep</a>
                             }
                         }
-                         <footer class="footer">
+                        <footer class="footer">
                             @foreach (var category in item.Categories)
                             {
-                                <a onclick="AddFilterCategory('@category.CategoryName')">#@category.CategoryName</a>
+                                <a>#@category.CategoryName</a>
                             }
                         </footer>
                     </div>
@@ -87,20 +92,6 @@
     </div>
 </div>
 <script>
-    function AddFilterCategory(str) {
-      var request = new XMLHttpRequest();
-      request.onreadystatechange = function() {
-      };
-      var url = "/Gallery/AddFilterCategory";
-      request.open("POST", url, false);
-      request.setRequestHeader("Content-Type", "application/json");
-      request.onreadystatechange = function () {
-        if (request.readyState == 4 && request.status == 200) {
-            location.reload(true);
-        }
-      };
-    request.send(JSON.stringify(str));
-    }
     function LikeItem(str) {
       var request = new XMLHttpRequest();
       request.onreadystatechange = function() {

@@ -33,27 +33,17 @@ namespace AspNetProjekt.Controllers
             _myAppSettings = MyAppSettings;
         }
 
-        public IActionResult Index([FromQuery] string[]? category)
+        public IActionResult Index([FromQuery]string? category)
         {
-            if(category is not null && category.Length != 0)
-            {
-                HashSet<string> categories = new HashSet<string>();
-                var allCategories = _categoryService.FindAll().Select(e => e.CategoryName).ToList();
-                foreach (var item in category)
-                    if (allCategories.Contains(item))
-                        _myAppSettings.filteringCategories.Add(item);
-            }
 
             HashSet<Item> items = _itemService.FindAll().Where(e => e.ItemAvalibility > 0).ToHashSet();
             HashSet<Item> FileredItems = new HashSet<Item>();
-            if (_myAppSettings.filteringCategories is null || _myAppSettings.filteringCategories.Count == 0)
+           if(category is null)
                 return View("Index", items);
 
             foreach (var item in items)
-                foreach (var filteringCategory in _myAppSettings.filteringCategories)
-                    foreach (var cat in item.Categories)
-                        if (cat.CategoryName == filteringCategory)
-                            FileredItems.Add(item);
+                if (item.Categories.Any(e => e.CategoryId.ToString() == category))
+                    FileredItems.Add(item);
 
             return View("Index", FileredItems);
 
@@ -65,12 +55,7 @@ namespace AspNetProjekt.Controllers
             if (itemDto is null)
                 itemDto = new ItemDto();
 
-            var categories = _categoryService.FindAll().ToList();
-            itemDto.categoriesList = new List<SelectListItem>();
-
-            foreach (var category in categories)
-                itemDto.categoriesList.Add(new SelectListItem(category.CategoryName, category.CategoryId.ToString()));
-
+            itemDto.categoriesList = _categoryService.FindAllAsSelectList().ToList();
 
             return View("CreateItem", itemDto);
         }
@@ -165,7 +150,7 @@ namespace AspNetProjekt.Controllers
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
             _itemService.Wish(itemId, userId);
         }
-        [HttpPost]
+        /*[HttpPost]
         public IActionResult AddFilterCategory([FromBody] string categoryName)
         {
             List<Category> categories = _categoryService.FindAll().ToList();
@@ -177,9 +162,10 @@ namespace AspNetProjekt.Controllers
             if (!_myAppSettings.filteringCategories.Add(categoryName))
                 _myAppSettings.filteringCategories.Remove(categoryName);
 
-            return RedirectToAction("Index", _myAppSettings.filteringCategories.ToArray());
+            return Index(_myAppSettings.filteringCategories.ToArray());
+           // return RedirectToAction("Index", _myAppSettings.filteringCategories.ToArray());
 
-        }
+        }*/
 
         [Authorize(Roles = "Admin")]
         private string SaveImage(ItemDto itemDto)
@@ -213,6 +199,14 @@ namespace AspNetProjekt.Controllers
                 return;
             }
 
+        }
+
+
+
+        [HttpGet]
+        public void Test([FromForm] string? category)
+        {
+            string aa = category;
         }
 
         [HttpPost]

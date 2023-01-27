@@ -29,29 +29,16 @@ namespace AspNetProjekt.Controllers
             _myAppSettings = MyAppSettings;
         }
 
-        public IActionResult Index([FromQuery] string[]? category)
+        public IActionResult Index([FromQuery] string? category)
         {
-            if (category is not null && category.Length != 0)
-            {
-                HashSet<string> categories = new HashSet<string>();
-                var allCategories = _categoryService.FindAll().Select(e => e.CategoryName).ToList();
-                foreach (var item in category)
-                    if (allCategories.Contains(item))
-                        _myAppSettings.galleryFilteringCategories.Add(item);
-
-            }
-
             HashSet<Item> items = _itemService.FindAll().ToHashSet();
             HashSet<Item> FileredItems = new HashSet<Item>();
-            if (_myAppSettings.galleryFilteringCategories is null || _myAppSettings.galleryFilteringCategories.Count == 0)
+            if (category is null)
                 return View("Index", items);
 
             foreach (var item in items)
-                foreach (var filteringCategory in _myAppSettings.galleryFilteringCategories)
-                    foreach (var cat in item.Categories)
-                        if (cat.CategoryName == filteringCategory)
-                            FileredItems.Add(item);
-
+                if (item.Categories.Any(e => e.CategoryId.ToString() == category))
+                    FileredItems.Add(item);
             return View("Index", FileredItems);
         }
 
@@ -64,21 +51,6 @@ namespace AspNetProjekt.Controllers
                 RedirectToAction("index");
             ItemDto itemDto = new ItemDto(item);
             return RedirectToAction("CreateItem", "Shop", itemDto);
-        }
-        [HttpPost]
-        public IActionResult AddFilterCategory([FromBody] string categoryName)
-        {
-            List<Category> categories = _categoryService.FindAll().ToList();
-            if (!categories.Any(e => e.CategoryName == categoryName))
-                return Index(_myAppSettings.galleryFilteringCategories.ToArray());
-            if (_myAppSettings.galleryFilteringCategories is null)
-                _myAppSettings.galleryFilteringCategories = new HashSet<string>();
-
-            if (!_myAppSettings.galleryFilteringCategories.Add(categoryName))
-                _myAppSettings.galleryFilteringCategories.Remove(categoryName);
-
-            return RedirectToAction("Index", _myAppSettings.galleryFilteringCategories.ToArray());
-
         }
     }
 }

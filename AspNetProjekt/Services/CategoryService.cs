@@ -1,5 +1,6 @@
 ﻿using AspNetProjekt.Areas.Identity.Data;
 using AspNetProjekt.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspNetProjekt.Services
 {
@@ -28,6 +29,17 @@ namespace AspNetProjekt.Services
         public ICollection<Category> FindAll()
         {
             return _context.Categories.ToList();
+        }
+
+        public ICollection<SelectListItem> FindAllAsSelectList()
+        {
+            var categories = FindAll().ToList();
+            var categoriesList = new List<SelectListItem>();
+
+            foreach (var category in categories)
+                categoriesList.Add(new SelectListItem(category.CategoryName, category.CategoryId.ToString()));
+
+            return categoriesList;
         }
 
         public Category? FindBy(Guid? id)

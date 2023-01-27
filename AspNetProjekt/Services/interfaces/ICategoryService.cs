@@ -1,4 +1,5 @@
 ﻿using AspNetProjekt.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspNetProjekt.Services
 {
@@ -15,5 +16,6 @@ namespace AspNetProjekt.Services
         public ICollection<Category> FindAll();
 
         public ICollection<Category> FindPage(int page, int size);
+        public ICollection<SelectListItem> FindAllAsSelectList();
     }
 }
