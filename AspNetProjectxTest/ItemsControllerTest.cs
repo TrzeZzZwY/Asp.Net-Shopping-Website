@@ -41,7 +41,7 @@ namespace AspNetProjectxTest
                  new Item()
                  {
                      ItemName = "Miœ",
-                     ItemDescription = "Du¿y miœ, idealny prezent dla dziecka",
+                     ItemDescription = "Du¿y miœ",
                      ItemAvalibility = 2,
                      ItemPrice = 80,
                      ItemDiscount = 0,
