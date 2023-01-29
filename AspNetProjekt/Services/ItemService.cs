@@ -106,7 +106,7 @@ namespace AspNetProjekt.Services
                     {
                         CustomerWishItem = cust,
                         Viewed = false,
-                        message = $"Jeden z przedmiotów w twojej liście życzeń jest spowrotem dostępny ( {item.ItemName} )"
+                        message = $"Jeden z przedmiotów w twojej liście życzeń jest ponownie dostępny ( {item.ItemName} )"
                     }
                     );
                 _context.SaveChanges();
