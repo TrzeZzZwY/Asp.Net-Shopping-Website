@@ -56,12 +56,14 @@ namespace AspNetProjekt.Services
         {
             if (shoppingCart.CustomerShoppingCart_Items.Count == 0)
                 return null;
+
             Transaction transaction = new Transaction()
             {
                 CustomerId = shoppingCart.CustomerId,
                 transaction_Items = new List<Transaction_Item>(),
                 TransactionDate = _clockProvider.Now()
             };
+
             var entity = _context.Transactions.Add(transaction);
             foreach (var shoppingCart_Item in shoppingCart.CustomerShoppingCart_Items)
             {

@@ -53,7 +53,10 @@ namespace AspNetProjekt.Services
             if (find is null)
                 return false;
 
-            if (_context.Transaction_Items.Any(e => e.ItemId == id) || _context.customerShoppingCart_Items.Any(e => e.ItemId == id))
+            if (_context.Transaction_Items.Any(e => e.ItemId == id) ||
+                _context.customerShoppingCart_Items.Any(e => e.ItemId == id) ||
+                _context.Customers.Any(e => e.ItemLikes.Any(e => e.ItemId == id)) ||
+                _context.Customers.Any(e => e.CustomerWishList.Any(e => e.ItemId == id)))
                 return false;
             _context.Items.Remove(find);
             _context.SaveChanges();
@@ -69,23 +72,53 @@ namespace AspNetProjekt.Services
                 find.ItemName = item.ItemName;
                 find.ItemPrice = item.ItemPrice;
                 find.ItemDiscount = item.ItemDiscount;
+                if (find.ItemAvalibility == 0 && item.ItemAvalibility != 0)
+                    SendMessages(item);
                 find.ItemAvalibility = item.ItemAvalibility;
                 _context.Entry(find).Collection(e => e.Categories).Load();
                 find.Categories = new HashSet<Category>();
                 foreach (var category in item.Categories)
                     find.Categories.Add(_context.Categories.Find(category.CategoryId));
-                
-                find.CustomerShoppingCart_Item = item.CustomerShoppingCart_Item;
-                find.Transaction_Items = item.Transaction_Items;
-                find.ItemLikes = item.ItemLikes;
-                find.CustomerWishList = item.CustomerWishList;
+
+                //find.CustomerShoppingCart_Item = item.CustomerShoppingCart_Item;
+                //find.Transaction_Items = item.Transaction_Items;
+                //find.ItemLikes = item.ItemLikes;
+                //find.CustomerWishList = item.CustomerWishList;
                 find.ItemImageName = item.ItemImageName;
                 _context.SaveChanges();
                 return true;
             }
-             catch
+            catch
             {
                 return false;
+            }
+        }
+
+        public void SendMessages(Item item)
+        {
+            var customersWishItems = _context.customerWishItems.Where(e => e.Item == item).ToList();
+            foreach (var customersWishItem in customersWishItems)
+            {
+                var cust = _context.customerWishItems.Find(customersWishItem.CustomerWishItemId);
+
+                var a = _context.customerWishItemMessages.Add(
+                    new CustomerWishItemMessage()
+                    {
+                        CustomerWishItem = cust,
+                        Viewed = false,
+                        message = $"Jeden z przedmiotów w twojej liście życzeń jest spowrotem dostępny ( {item.ItemName} )"
+                    }
+                    );
+                _context.SaveChanges();
+            }
+        }
+        public void VisitMessage(Guid id)
+        {
+            var customerWishItemMessage = _context.customerWishItemMessages.Find(id);
+            if (customerWishItemMessage is not null)
+            {
+                customerWishItemMessage.Viewed = true;
+                _context.SaveChanges();
             }
         }
         public ICollection<Item> FindAll()
@@ -133,7 +166,29 @@ namespace AspNetProjekt.Services
             if (customer == null)
                 return new List<Item>();
             _context.Entry(customer).Collection(e => e.CustomerWishList).Load();
-            return customer.CustomerWishList;
+            foreach (var item in customer.CustomerWishList)
+            {
+                _context.Entry(item).Reference(e => e.Item).Load();
+            }
+            return customer.CustomerWishList.Select(e => e.Item).ToList();
+        }
+        public ICollection<CustomerWishItemMessage> GetMessages(Guid id)
+        {
+            Customer? customer = _context.Customers.Find(id);
+            List<CustomerWishItemMessage> output = new List<CustomerWishItemMessage>();
+            if (customer == null)
+                return output;
+            List<CustomerWishItem> customerWishItems = _context.customerWishItems.Where(e => e.Customer == customer).ToList();
+            foreach (var item in customerWishItems)
+            {
+                _context.Entry(item).Collection(e => e.customerWishItemMessages).Load();
+                if (item.customerWishItemMessages is not null)
+                    foreach (var message in item.customerWishItemMessages)
+                    {
+                        output.Add(message);
+                    }
+            }
+            return output;
         }
 
         public bool Like(Guid itemId, Guid userId)
@@ -158,10 +213,15 @@ namespace AspNetProjekt.Services
             if (item == null || customer == null)
                 return false;
             _context.Entry(item).Collection(e => e.CustomerWishList).Load();
-            if (item.CustomerWishList.Contains(customer))
-                item.CustomerWishList.Remove(customer);
+            if (item.CustomerWishList.Any(e => e.Customer == customer))
+                item.CustomerWishList.Remove(item.CustomerWishList.Where(e => e.Customer == customer).First());
             else
-                item.CustomerWishList.Add(customer);
+                item.CustomerWishList.Add(new CustomerWishItem()
+                {
+                    Item = item,
+                    Customer = customer,
+                    customerWishItemMessages = new HashSet<CustomerWishItemMessage>()
+                });
             _context.SaveChanges();
             return true;
         }

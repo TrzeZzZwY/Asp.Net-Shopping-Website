@@ -33,12 +33,12 @@ namespace AspNetProjekt.Controllers
             _myAppSettings = MyAppSettings;
         }
 
-        public IActionResult Index([FromQuery]string? category)
+        public IActionResult Index([FromQuery] string? category)
         {
 
             HashSet<Item> items = _itemService.FindAll().Where(e => e.ItemAvalibility > 0).ToHashSet();
             HashSet<Item> FileredItems = new HashSet<Item>();
-           if(category is null)
+            if (category is null)
                 return View("Index", items);
 
             foreach (var item in items)
@@ -96,6 +96,7 @@ namespace AspNetProjekt.Controllers
             ItemDto itemDto = new ItemDto(item);
             return CreateItem(itemDto);
         }
+
         [Authorize(Roles = "Admin")]
         private IActionResult EditItem(ItemDto itemDto)
         {
@@ -110,6 +111,17 @@ namespace AspNetProjekt.Controllers
             return RedirectToAction("Index");
         }
         #endregion
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteItem(Guid? id)
+        {
+            if (id is null)
+                return RedirectToAction("Index");
+            if (_itemService.Delete(id))
+                TempData["RemovedItem"] = "Success";
+            else
+                TempData["RemovedItem"] = "Fail";
+            return RedirectToAction("Index");
+        }
         #region createCategory
         [Authorize(Roles = "Admin")]
         public IActionResult CreateCategory()
@@ -150,23 +162,6 @@ namespace AspNetProjekt.Controllers
             Guid userId = Guid.Parse(_userManager.GetUserId(User));
             _itemService.Wish(itemId, userId);
         }
-        /*[HttpPost]
-        public IActionResult AddFilterCategory([FromBody] string categoryName)
-        {
-            List<Category> categories = _categoryService.FindAll().ToList();
-            if (!categories.Any(e => e.CategoryName == categoryName))
-                return Index(_myAppSettings.filteringCategories.ToArray());
-            if (_myAppSettings.filteringCategories is null)
-                _myAppSettings.filteringCategories = new HashSet<string>();
-
-            if (!_myAppSettings.filteringCategories.Add(categoryName))
-                _myAppSettings.filteringCategories.Remove(categoryName);
-
-            return Index(_myAppSettings.filteringCategories.ToArray());
-           // return RedirectToAction("Index", _myAppSettings.filteringCategories.ToArray());
-
-        }*/
-
         [Authorize(Roles = "Admin")]
         private string SaveImage(ItemDto itemDto)
         {
@@ -200,20 +195,5 @@ namespace AspNetProjekt.Controllers
             }
 
         }
-
-
-
-        [HttpGet]
-        public void Test([FromForm] string? category)
-        {
-            string aa = category;
-        }
-
-        [HttpPost]
-        public JsonResult AjaxMethod([FromBody] string test)
-        {
-            return Json(test);
-        }
-
     }
 }

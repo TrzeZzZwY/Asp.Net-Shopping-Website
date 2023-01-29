@@ -20,6 +20,9 @@ namespace AspNetProjekt.Services
 
         public ICollection<Item> GetLikes(Guid id);
         public ICollection<Item> GetWishes(Guid id);
-        
+        void SendMessages(Item item);
+        public void VisitMessage(Guid id);
+        public ICollection<CustomerWishItemMessage> GetMessages(Guid id);
+
     }
 }

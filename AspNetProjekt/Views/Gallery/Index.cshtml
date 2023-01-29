@@ -41,7 +41,8 @@
                 <div class="card mb-4" style="width: 18rem;">
                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                     {
-                        <a asp-action="EditItem" asp-controller="Shop" asp-route-id="@item.ItemId" style="position:absolute" class="btn btn-danger d-inline-block m-1">edit</a>
+                        <a asp-controller="Shop" asp-action="EditItem" asp-route-id="@item.ItemId"  class="btn btn-warning d-inline-block m-1">edytuj</a>
+                        <a asp-action="DeleteItem" asp-route-id="@item.ItemId"  class="btn btn-danger d-inline-block m-1">usuń przedmiot</a>
 
                     }
                     @if (String.IsNullOrEmpty(item.ItemImageName))
@@ -68,7 +69,7 @@
                             <h5 class="card-title">@(Math.Round(item.ItemPrice - item.ItemPrice * item.ItemDiscount / 100,2)) zł</h5>
                         }
                         <p class="card-text">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
-                        <p class="card-text">iloś w magazynie: @Html.DisplayFor(modelItem => item.ItemAvalibility)</p>
+                        <p class="card-text">ilość w magazynie: @Html.DisplayFor(modelItem => item.ItemAvalibility)</p>
                         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireUser")).Succeeded)
                         {
                             <a onclick="LikeItem('@item.ItemId')" class="btn btn-primary d-inline-block "><i class="bi bi-heart-fill"></i>(@item.ItemLikes.Count)</a>
@@ -121,3 +122,54 @@
     request.send(JSON.stringify(str));
     }
 </script>
+@if (TempData["RemovedItem"] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    @if (((string)TempData["RemovedItem"]) == "Success")
+    {
+        <script type="text/javascript">
+                    toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-bottom-right",
+              "preventDuplicates": false,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "5000",
+              "timeOut": "3000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+                   toastr.info('Pomyślnie usunięto')
+        </script>
+    }
+    @if (((string)TempData["RemovedItem"]) == "Fail")
+    {
+        <script type="text/javascript">
+                    toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-bottom-right",
+              "preventDuplicates": false,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "5000",
+              "timeOut": "3000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+                   toastr.warning('Nie udało się usunąć przedmiotu')
+        </script>
+    }
+}

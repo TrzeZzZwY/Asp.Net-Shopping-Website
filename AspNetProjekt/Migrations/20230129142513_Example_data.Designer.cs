@@ -4,6 +4,7 @@ using AspNetProjekt.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetProjekt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230129142513_Example_data")]
+    partial class Example_data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,17 +41,17 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = new Guid("b972a6ff-87ee-4513-94e3-19884c2e14c9"),
+                            CategoryId = new Guid("21ee6f00-bb51-466f-bc63-8be6c5506852"),
                             CategoryName = "Pluszak"
                         },
                         new
                         {
-                            CategoryId = new Guid("cf73100c-a541-41ff-86cb-4b942ce2e90a"),
+                            CategoryId = new Guid("f3591a5a-f3cb-41d3-9037-4b306b78fde7"),
                             CategoryName = "Szalik"
                         },
                         new
                         {
-                            CategoryId = new Guid("a9273c20-3cee-48c6-adc1-1a9baf26c4bc"),
+                            CategoryId = new Guid("10f70f27-6034-45b1-891a-8df78e94c456"),
                             CategoryName = "Czapka"
                         });
                 });
@@ -106,49 +108,6 @@ namespace AspNetProjekt.Migrations
                     b.ToTable("customerShoppingCart_Items");
                 });
 
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerWishItem", b =>
-                {
-                    b.Property<Guid>("CustomerWishItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CustomerWishItemId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("customerWishItems");
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerWishItemMessage", b =>
-                {
-                    b.Property<Guid>("CustomerWishItemMessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomerWishItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Viewed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CustomerWishItemMessageId");
-
-                    b.HasIndex("CustomerWishItemId");
-
-                    b.ToTable("customerWishItemMessages");
-                });
-
             modelBuilder.Entity("AspNetProjekt.Models.Item", b =>
                 {
                     b.Property<Guid>("ItemId")
@@ -181,7 +140,7 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            ItemId = new Guid("ade2f7e9-8548-44f0-beb2-eceac9cd2a2e"),
+                            ItemId = new Guid("6d93bb03-6636-4530-a978-f7da85164bfb"),
                             ItemAvalibility = 3,
                             ItemDescription = "Zielona szydełkowa żaba, wykonana ręcznie z mięciutkiej włóczki",
                             ItemDiscount = 10,
@@ -190,7 +149,7 @@ namespace AspNetProjekt.Migrations
                         },
                         new
                         {
-                            ItemId = new Guid("40968a72-a5d8-4a68-9621-0356c4ac5680"),
+                            ItemId = new Guid("559cb5d9-9e70-4751-97bd-2595cac604ff"),
                             ItemAvalibility = 2,
                             ItemDescription = "Duży pluszowy ręcznie wykonany miś",
                             ItemDiscount = 0,
@@ -199,7 +158,7 @@ namespace AspNetProjekt.Migrations
                         },
                         new
                         {
-                            ItemId = new Guid("88a47289-9721-4372-acab-c80b603091d4"),
+                            ItemId = new Guid("690f3109-0d9d-4d41-b227-02ecc1123aa0"),
                             ItemAvalibility = 10,
                             ItemDescription = "Bardzo ciepły ręcznie wykonany szalik",
                             ItemDiscount = 30,
@@ -208,7 +167,7 @@ namespace AspNetProjekt.Migrations
                         },
                         new
                         {
-                            ItemId = new Guid("7b74e3b1-8df5-4c3e-b09d-c5817004c90e"),
+                            ItemId = new Guid("83b59d0a-cd7a-4f6e-83ab-73de3ee0e596"),
                             ItemAvalibility = 0,
                             ItemDescription = "Bardzo ciepły ręcznie wykonany szalik",
                             ItemDiscount = 0,
@@ -217,7 +176,7 @@ namespace AspNetProjekt.Migrations
                         },
                         new
                         {
-                            ItemId = new Guid("6c69beec-85f4-4a54-8bff-a44ca69061ad"),
+                            ItemId = new Guid("e87e3099-f4ce-4f5e-80a7-8f2719904ed2"),
                             ItemAvalibility = 1,
                             ItemDescription = "Bardzo ciepła ręcznie wykonana czapka",
                             ItemDiscount = 0,
@@ -226,7 +185,7 @@ namespace AspNetProjekt.Migrations
                         },
                         new
                         {
-                            ItemId = new Guid("6c4b0473-3635-4838-8f48-e893ff439407"),
+                            ItemId = new Guid("3b5007ab-8fce-487d-b2f9-a1802704c568"),
                             ItemAvalibility = 0,
                             ItemDescription = "Bardzo ciepła ręcznie wykonana czapka",
                             ItemDiscount = 0,
@@ -373,6 +332,21 @@ namespace AspNetProjekt.Migrations
                     b.ToTable("Item_Customer_Likes", (string)null);
                 });
 
+            modelBuilder.Entity("CustomerItem1", b =>
+                {
+                    b.Property<Guid>("CustomerWishListCustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomerWishListItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CustomerWishListCustomerId", "CustomerWishListItemId");
+
+                    b.HasIndex("CustomerWishListItemId");
+
+                    b.ToTable("Item_Costomer_Wishes", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -402,15 +376,15 @@ namespace AspNetProjekt.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "465c6b28-26ff-438b-b13d-1e91f2a5469f",
-                            ConcurrencyStamp = "2259cb55-4154-4f34-ad59-7a499724feac",
+                            Id = "90c4620a-8d8f-4518-81f3-f051d5c83383",
+                            ConcurrencyStamp = "08886fa1-0e73-425f-9b11-5f1846c72601",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "e2e0ac5a-d6c0-474c-93cb-e59e9f0eaeef",
-                            ConcurrencyStamp = "2d1e5b64-786a-4a09-9297-3878390641ee",
+                            Id = "3fbb7f9c-6225-4b1f-9ad4-06cda3bf089a",
+                            ConcurrencyStamp = "890c5817-5b2c-4290-ae8b-ca2c83717a54",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -565,36 +539,6 @@ namespace AspNetProjekt.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerWishItem", b =>
-                {
-                    b.HasOne("AspNetProjekt.Models.Customer", "Customer")
-                        .WithMany("CustomerWishList")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AspNetProjekt.Models.Item", "Item")
-                        .WithMany("CustomerWishList")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerWishItemMessage", b =>
-                {
-                    b.HasOne("AspNetProjekt.Models.CustomerWishItem", "CustomerWishItem")
-                        .WithMany("customerWishItemMessages")
-                        .HasForeignKey("CustomerWishItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CustomerWishItem");
-                });
-
             modelBuilder.Entity("AspNetProjekt.Models.Transaction", b =>
                 {
                     b.HasOne("AspNetProjekt.Models.Customer", "Customer")
@@ -655,6 +599,21 @@ namespace AspNetProjekt.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CustomerItem1", b =>
+                {
+                    b.HasOne("AspNetProjekt.Models.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerWishListCustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AspNetProjekt.Models.Item", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerWishListItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -710,8 +669,6 @@ namespace AspNetProjekt.Migrations
                 {
                     b.Navigation("CustomerShoppingCart");
 
-                    b.Navigation("CustomerWishList");
-
                     b.Navigation("Transactions");
                 });
 
@@ -720,16 +677,9 @@ namespace AspNetProjekt.Migrations
                     b.Navigation("CustomerShoppingCart_Items");
                 });
 
-            modelBuilder.Entity("AspNetProjekt.Models.CustomerWishItem", b =>
-                {
-                    b.Navigation("customerWishItemMessages");
-                });
-
             modelBuilder.Entity("AspNetProjekt.Models.Item", b =>
                 {
                     b.Navigation("CustomerShoppingCart_Item");
-
-                    b.Navigation("CustomerWishList");
 
                     b.Navigation("Transaction_Items");
                 });

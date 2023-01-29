@@ -1,0 +1,36 @@
+﻿@page
+@model AspNetProjekt.Areas.Identity.Pages.Account.Manage.MessagesModel
+@{
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Wiadomość
+            </th>
+            <th>
+                Ok
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Messages)
+        {
+            <tr>
+
+                <td>
+                    @if(item.Viewed){                       
+                        @item.message
+                    }
+                    else
+                    {
+                        <span class="text-danger">@item.message</span>
+                    }
+                </td>
+                <td>
+                    <a  asp-page-handler="Ok" asp-route-id="@item.CustomerWishItemMessageId" class="btn btn-primary">ok</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

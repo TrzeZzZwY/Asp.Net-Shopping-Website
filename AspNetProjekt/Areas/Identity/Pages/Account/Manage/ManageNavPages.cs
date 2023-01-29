@@ -63,6 +63,7 @@ namespace  AspNetProjekt.Areas.Identity.Pages.Account.Manage
         public static string Transactions => "Transactions";
         public static string LikeItem => "LikeItem";
         public static string WishItem => "WishItem";
+        public static string Messages => "Messages";
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -114,6 +115,7 @@ namespace  AspNetProjekt.Areas.Identity.Pages.Account.Manage
         public static string TransactionsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Transactions);
         public static string LikeItemNavClass(ViewContext viewContext) => PageNavClass(viewContext, LikeItem);
         public static string WishItemNavClass(ViewContext viewContext) => PageNavClass(viewContext, WishItem);
+        public static string MessagesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Messages);
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

@@ -13,6 +13,8 @@ public class IdentityContext : IdentityDbContext<MyUser>
     public DbSet<Transaction_Item> Transaction_Items { get; set; }
     public DbSet<CustomerShoppingCart> CustomersShoppingCarts { get; set; }
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<CustomerWishItem> customerWishItems { get; set; }
+    public DbSet<CustomerWishItemMessage> customerWishItemMessages { get; set; }
     public DbSet<CustomerShoppingCart_Item> customerShoppingCart_Items { get; set; }
     public IdentityContext(DbContextOptions<IdentityContext> options)
         : base(options)
@@ -26,10 +28,68 @@ public class IdentityContext : IdentityDbContext<MyUser>
             new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "User", NormalizedName = "USER" }
             );
 
+        Category CatPlusz = new Category { CategoryId = Guid.NewGuid(), CategoryName = "Pluszak" };
+        Category CatSzal = new Category { CategoryId = Guid.NewGuid(), CategoryName = "Szalik" };
+        Category CatCzap = new Category { CategoryId = Guid.NewGuid(), CategoryName = "Czapka" };
+
         builder.Entity<Category>().HasData(
-            new Category { CategoryId = Guid.NewGuid(), CategoryName = "Pluszak" },
-            new Category { CategoryId = Guid.NewGuid(), CategoryName = "Szalik" },
-            new Category { CategoryId = Guid.NewGuid(), CategoryName = "Czapka" }
+            CatPlusz, CatSzal, CatCzap
+            );
+        builder.Entity<Item>().HasData(
+            new Item()
+            {
+                ItemId = Guid.NewGuid(),
+                ItemName = "Szydełkowa Żaba",
+                ItemDescription = "Zielona szydełkowa żaba, wykonana ręcznie z mięciutkiej włóczki",
+                ItemAvalibility = 3,
+                ItemPrice = 100,
+                ItemDiscount = 10
+            },
+            new Item()
+            {
+                ItemId = Guid.NewGuid(),
+                ItemName = "Pluszowy miś",
+                ItemDescription = "Duży pluszowy ręcznie wykonany miś",
+                ItemAvalibility = 2,
+                ItemPrice = 70,
+                ItemDiscount = 0
+            },
+            new Item()
+            {
+                ItemId = Guid.NewGuid(),
+                ItemName = "Czarny szalik",
+                ItemDescription = "Bardzo ciepły ręcznie wykonany szalik",
+                ItemAvalibility = 10,
+                ItemPrice = 120,
+                ItemDiscount = 30
+            },
+            new Item()
+            {
+                ItemId = Guid.NewGuid(),
+                ItemName = "Granatowy Szalik",
+                ItemDescription = "Bardzo ciepły ręcznie wykonany szalik",
+                ItemAvalibility = 0,
+                ItemPrice = 100,
+                ItemDiscount = 0
+            },
+            new Item()
+            {
+                ItemId = Guid.NewGuid(),
+                ItemName = "Biała czapka",
+                ItemDescription = "Bardzo ciepła ręcznie wykonana czapka",
+                ItemAvalibility = 1,
+                ItemPrice = 110,
+                ItemDiscount = 0
+            },
+            new Item()
+            {
+                ItemId = Guid.NewGuid(),
+                ItemName = "Szara czapka",
+                ItemDescription = "Bardzo ciepła ręcznie wykonana czapka",
+                ItemAvalibility = 0,
+                ItemPrice = 70,
+                ItemDiscount = 0
+            }
             );
 
         builder.Entity<Category>().HasKey(e => e.CategoryId);
@@ -78,8 +138,13 @@ public class IdentityContext : IdentityDbContext<MyUser>
             .UsingEntity(j => j.ToTable("Item_Customer_Likes"));
         builder.Entity<Item>()
             .HasMany(e => e.CustomerWishList)
-            .WithMany(e => e.CustomerWishList)
-            .UsingEntity(j => j.ToTable("Item_Costomer_Wishes"));
+            .WithOne(e => e.Item);
+        builder.Entity<Customer>()
+            .HasMany(e => e.CustomerWishList)
+            .WithOne(e => e.Customer);
+        builder.Entity<CustomerWishItem>()
+            .HasMany(e => e.customerWishItemMessages)
+            .WithOne(e => e.CustomerWishItem);
         builder.Entity<Customer>()
             .HasOne(e => e.IdentityUser)
             .WithOne(e => e.customer)

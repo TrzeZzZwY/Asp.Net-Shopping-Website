@@ -1,6 +1,7 @@
 ﻿using AspNetProjekt.Models;
 using AspNetProjekt.Services;
 using AspNetProjekt.Services.interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,7 +42,7 @@ namespace AspNetProjekt.Controllers
                     FileredItems.Add(item);
             return View("Index", FileredItems);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult EditItem(Guid? id)
         {
             if (id is null)
@@ -51,6 +52,17 @@ namespace AspNetProjekt.Controllers
                 RedirectToAction("index");
             ItemDto itemDto = new ItemDto(item);
             return RedirectToAction("CreateItem", "Shop", itemDto);
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteItem(Guid? id)
+        {
+            if (id is null)
+                return RedirectToAction("Index");
+            if (_itemService.Delete(id))
+                TempData["RemovedItem"] = "Success";
+            else
+                TempData["RemovedItem"] = "Fail";
+            return RedirectToAction("Index");
         }
     }
 }
