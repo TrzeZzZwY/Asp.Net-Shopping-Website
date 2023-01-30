@@ -42,6 +42,11 @@ namespace AspNetProjectxTest
             throw new NotImplementedException();
         }
 
+        public ICollection<CustomerWishItemMessage> GetMessages(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public ICollection<Item> GetWishes(Guid id)
         {
             throw new NotImplementedException();
@@ -59,12 +64,22 @@ namespace AspNetProjectxTest
             return item.ItemId;
         }
 
+        public void SendMessages(Item item)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Update(Item item)
         {
             if (!_context.ContainsKey(item.ItemId))
                 return false;
             _context[item.ItemId] = item;
             return true;
+        }
+
+        public void VisitMessage(Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         public bool Wish(Guid itemId, Guid userId)
