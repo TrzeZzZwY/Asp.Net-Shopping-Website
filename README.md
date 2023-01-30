@@ -1,7 +1,7 @@
 # Aplikacja sklep z rzeczami Handmade
 Aplikacja symuluje dzia³anie sklepu. U¿ytkownicy mog¹ przegl¹daæ rzeczy, dodawaæ je do koszyka,
 dodawaæ polubiebia oraz dodawaæ produkt do listy ¿yczeñ. Administrator mo¿e robiæ to co u¿ytkownik,
-dodatkowo mo¿e dodawaæ oraz modyfikowaæ produkty oraz dodawaæ nowe kategorie.
+dodatkowo mo¿e dodawaæ, modyfikowaæ oraz usuwaæ produkty oraz dodawaæ nowe kategorie.
 
 Aplikacja zosta³a napisana w jêzyku c# z wykorzystaniem SQL Server
 
@@ -47,6 +47,8 @@ mo¿e robiæ to samo co u¿ytkownik nie zalogowany oraz:
 -Przegl¹daæ przedmioty z listy ¿yczeñ
 
 -Przegl¹daæ przeg¹daæ historiê tranzakcji
+
+-Dostaje powiadomienia o tym ¿e przedmiot z listy ¿yczeñ jest ponownie dostêpny
 ## u¿ytkownik zalogowany jako administrator
 
 mo¿e robiæ to samo co u¿ytkownik zalogowany oraz:
@@ -54,6 +56,8 @@ mo¿e robiæ to samo co u¿ytkownik zalogowany oraz:
 -Dodawaæ nowe produkty
 
 -Modyfikowaæ produkty
+
+-Usuwaæ produkty (je¿eli nikt nie wszed³ z nim w interakcje)
 
 -Dodawaæ kategoriê
 

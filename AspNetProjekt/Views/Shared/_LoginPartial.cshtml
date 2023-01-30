@@ -21,7 +21,9 @@
         bool haveMessage = list.Any(e => (e.customerWishItemMessages is not null && e.customerWishItemMessages.Where(e => e.Viewed == false).Count() > 0));
         @if (haveMessage)
         {
-            <div class="text-danger d-inline" >Masz nieprzeczytane wiadomości!</div>
+            <li class="nav-item text-danger">
+                <a class="nav-link text-danger btn btn-link btn-primary m-1" asp-area="Identity" asp-page="/Account/Manage/Messages" title="Manage">Masz nieprzeczytane wiadomości!</a>
+            </li>
         }
         <li class="nav-item">
 

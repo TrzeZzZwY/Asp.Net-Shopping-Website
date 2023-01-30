@@ -14,21 +14,21 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Messages)
+        @for(int i = Model.Messages.Count() - 1;i > 0; i--)
         {
             <tr>
 
                 <td>
-                    @if(item.Viewed){                       
-                        @item.message
+                    @if(Model.Messages[i].Viewed){                       
+                        @Model.Messages[i].message
                     }
                     else
                     {
-                        <span class="text-danger">@item.message</span>
+                        <span class="text-danger">@Model.Messages[i].message</span>
                     }
                 </td>
                 <td>
-                    <a  asp-page-handler="Ok" asp-route-id="@item.CustomerWishItemMessageId" class="btn btn-primary">ok</a>
+                    <a  asp-page-handler="Ok" asp-route-id="@Model.Messages[i].CustomerWishItemMessageId" class="btn btn-primary">ok</a>
                 </td>
             </tr>
         }
