@@ -48,6 +48,8 @@ mo¿e robiæ to samo co u¿ytkownik nie zalogowany oraz:
 
 -Przegl¹daæ przeg¹daæ historiê tranzakcji
 
+-Przegl¹daæ powiadomienia
+
 -Dostaje powiadomienia o tym ¿e przedmiot z listy ¿yczeñ jest ponownie dostêpny
 ## u¿ytkownik zalogowany jako administrator
 
